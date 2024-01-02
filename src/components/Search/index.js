@@ -6,16 +6,17 @@ export const Search = () => {
     const requestBalance = () => {
         try {
             const options = {
+                mode: 'no-cors',
                 method: 'GET',
                 headers: {accept: 'application/json', 'api-key': '142cf1b0-1ca7-11ee-bb5e-9d74c2e854ac'}
               };
               
-              fetch(`https://api.geniidata.com/api/v1/brc20/address/${btcAddress}/assets`, options)
+              fetch(`https://api.geniidata.com/api/1/brc20/balance?address=${btcAddress}`, options)
                 .then(response => response.json())
                 .then(response => setData(response.data.list))
-                console.log(response.data.list)
+                console.log(btcAddress)
         } catch (error) {
-            console.log(error)
+            console.log('error',error)
         }
       }
     return(
