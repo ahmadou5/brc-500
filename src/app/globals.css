@@ -16,12 +16,27 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 1.2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1d1c20;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #030303;
+}
+
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
+      whitesmoke
     )
-    rgb(var(--background-start-rgb));
+   rgb(192, 190, 190)
 }
