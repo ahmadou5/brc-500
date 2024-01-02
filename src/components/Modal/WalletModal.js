@@ -39,7 +39,7 @@ export const WalletModal = () => {
             },
             onFinish: (response) => {
               console.log(response);
-              setAddress(response)
+              setAddress(response.addresses)
             },
             onCancel: () => alert('Request canceled'),
             }
@@ -64,12 +64,12 @@ export const WalletModal = () => {
                     <p className="py-1 px-1 font-semibold text-md">{'Unisat Wallet'}</p>
                 </div>
             </div>
-            <div className="w-[100%] h-14 ml-auto mr-auto">
+            { /** <div className="w-[100%] h-14 ml-auto mr-auto">
                 <div onClick={() => XverseConnect()} className="flex mt-1 mb-1 py-2 px-2 rounded-xl border cursor-pointer border-black/45">
                     <img className="w-8 h-8 ml-5 mr-8 rounded-xl" src={'https://pbs.twimg.com/profile_images/1735901386381144064/o1_zB5Jf_400x400.png'} alt={'Xverse'} />
                     <p className="py-1 px-1 font-semibold text-md">{'Xverse Wallet'}</p>
                 </div>
-            </div>
+    </div> **/ }
             </div>
         </div>
     </div>

@@ -12,7 +12,7 @@ export const Navbar = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => {
     setIsWalletModal(true);
-    alert('clicked')
+    //alert('clicked')
   };
 
   const Pages = [
