@@ -79,7 +79,7 @@ export const Card = () => {
                 MTID
               </div>
               <div className=" h-8 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[16%] bg-black/70 py-1 px-2 rounded-3xl">
-                Message
+                Preview
               </div>
               <div className=" h-8 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
                 Date
@@ -100,7 +100,7 @@ export const Card = () => {
                   {11}
                 </div>
                 <div className=" h-9 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  {data.mime_type}
+                <a target="_blank" href={`https://ordinals.com/preview/${data.id}`} >{data.mime_type}</a>
                 </div>
                 <div className=" h-9 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
                   {`${new Date(data.timestamp).toLocaleDateString()}`}
