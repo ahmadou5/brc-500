@@ -24,33 +24,38 @@ export const Card = () => {
         data.length !== 0 && <div className="w-[100%] mt-[40px] bg-transparent py-4 px-1 h-auto">
         <div className="lg:w-[85%] w-[100%] rounded-3xl ml-auto mr-auto mt-2 mb-2 py-6 px-6 h-auto bg-white/25">
             <div className="text-white flex items-center justify-between">
-              <div className=" h-8 lg:w-18 ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
+              <div className=" h-8 lg:w-[13%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
                 MTID
               </div>
-              <div className=" h-8 lg:w-32 ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
-                Message
+              <div className=" h-8 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
+                Preview
               </div>
-              <div className=" h-8 lg:w-32 ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-0.5 px-0.5 rounded-3xl">
-                Block Time
+              <div className=" h-8 lg:w-[18%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
+                Number
               </div>
-              <div className=" h-8 lg:w-32 ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-0.5 px-0.5 rounded-3xl">
-                Rank Address
+              <div className=" h-8 lg:w-[20%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-0.5 px-0.5 rounded-3xl">
+                Date
+              </div>
+              <div className=" h-8 lg:w-[24%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-0.5 px-0.5 rounded-3xl">
+                inscription_id
               </div>
             </div>
           {data && data?.map((data,i) => (
              <div key={i}  className="text-black/95 text- mt-5 mb-5 flex items-center justify-between">
-                
-                <div className=" h-9 lg:w-[24%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  {data.number}
+                <div className=" h-9 lg:w-[13%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                  {23}
                 </div>
-                <div className=" h-9 lg:w-[24%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  {data.addre}
+                <div className=" h-9 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                <a target="_blank" href={`https://ordinals.com/preview/${data.id}`} >{data.mime_type}</a>
+                </div>
+                <div className=" h-9 lg:w-[18%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                  <a target="_blank" href={`https://ordinals.com/inscription/${data.id}`} >{data.number}</a>
+                </div>
+                <div className=" h-9 lg:w-[20%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-0.5 px-0.5 rounded-xl">
+                  {`${new Date(data.timestamp).toLocaleDateString()}`}
                 </div>
                 <div className=" h-9 lg:w-[24%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-0.5 px-0.5 rounded-xl">
-                  {data.value}
-                </div>
-                <div className=" h-9 lg:w-[24%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-0.5 px-0.5 rounded-xl">
-                  {data.timestamp}
+                {`${data.id.slice(0,12)}...`}
                 </div>
               </div>
           ))}
@@ -77,7 +82,7 @@ export const Card = () => {
                 Message
               </div>
               <div className=" h-8 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
-                Time
+                Date
               </div>
               <div className=" h-8 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
                 number
@@ -124,7 +129,7 @@ export const Card = () => {
                 Message
               </div>
               <div className=" h-8 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
-                Time
+                Date
               </div>
               <div className=" h-8 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
                 number
