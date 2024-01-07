@@ -11,7 +11,7 @@ export const Search = () => {
         let config = {
           method: "get",
           maxBodyLength: Infinity,
-          url: "https://api.hiro.so/ordinals/v1/inscriptions",
+          url: "https://api.hiro.so/ordinals/v1/inscriptions?mime_type=text%2Fplain",
           headers: {
             Accept: "application/json",
           },

@@ -50,7 +50,7 @@ export const Card = () => {
           {data && data?.map((data,i) => (
              <div key={i}  className="text-black/95 mt-2 bg-white/15 py-2 px-2 w-[24%] rounded-xl ml- h-[330px] mt-5 mb-5 block ">
                  <div className="w-[95%] mb-2 bg-white/15 h-[260px] py-4 px-4 text-center rounded-lg ml-auto mr-auto" >
-                  {` ${message}`} <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMessage(data?.id)}`}</div>
+                  {` ${ message !== undefined ? message : 'Error Fetching Message'}`} <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMessage(data?.id)}`}</div>
                  </div>
                  <div className="w-[95%] ml-auto h-[40px] flex mr-auto">
                  <div className=" ml-3 mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] py-1 px-2 rounded-xl">
