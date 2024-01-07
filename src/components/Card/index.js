@@ -6,7 +6,7 @@ export const Card = () => {
   const toggleToken = () => {
     setIsToken(!isToken);
   }
-  const { data, data2 } = GlobalContext()
+  const { data, setData, data2 } = GlobalContext()
   const  truncate = (str, maxLength) => {  
     if (str.length>maxLength) {  
     return str.replace(/^(.{0,maxLength}\S*)(\s.*|$)/s, "$1...");  
@@ -22,8 +22,10 @@ export const Card = () => {
     <div className="w-[100%] mt-[120px] bg-transparent py-4 px-1 h-auto">
       {
         data.length !== 0 && <div className="w-[100%] mt-[40px] bg-transparent py-4 px-1 h-auto">
+          <div onClick={() => {
+            setData([])
+          }} className="w-[100px] h-9 rounded-full bg-black ml-auto mr-auto py-1 px-1 mb-4 text-center  text-white">Close</div>
         <div className="lg:w-[88%] w-[100%] rounded-3xl flex flex-wrap items-center justify-between ml-auto mr-auto mt-2 mb-2 py-6 px-6 h-auto bg-white/25">
-            
           {data && data?.map((data,i) => (
              <div key={i}  className="text-black/95 bg-white/15 py-2 px-2 w-[24%] rounded-xl ml- h-[330px] mt-5 mb-5 block ">
                  <div className="w-[95%] mb-2 bg-white/15 h-[260px] py-4 px-4 text-center rounded-lg ml-auto mr-auto" >
@@ -31,7 +33,7 @@ export const Card = () => {
                  </div>
                  <div className="w-[95%] ml-auto h-[40px] flex mr-auto">
                  <div className=" ml-3 mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] py-1 px-2 rounded-xl">
-                  <a target="_blank" href={`https://ordinals.com/inscription/${data.id}`} >{`#${data.number}`}</a>
+                  <a target="_blank" href={`https://ordinals.com/content/${data.id}`} >{`#${data.number}`}</a>
                 </div>
                 <div className=" ml-auto mr-3 lg:py-1.5 text-center py-1 px-2 rounded-xl">
                   {`${new Date(data.timestamp).toLocaleDateString()}`}
