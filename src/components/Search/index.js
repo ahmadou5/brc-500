@@ -3,8 +3,9 @@ import { SearchButton } from "../Buttons"
 import axios  from "axios";
 import { GlobalContext } from "@/context/context";
 import { useEffect } from "react";
+import { calculateSizeAdjustValues } from "next/dist/server/font-utils";
 export const Search = () => {
-    const { btcAddress , setBTCAddress, setData, setData2 } = GlobalContext()
+    const { btcAddress , setBTCAddress, setData,data, setData2 } = GlobalContext()
     const requestInscription = () => {
       try {
         let config = {
@@ -24,6 +25,8 @@ export const Search = () => {
         console.log('axios erroe',error);
       }
     };
+
+    
 
     const requestInscriptionbyAddress = () => {
       try {
@@ -51,6 +54,8 @@ export const Search = () => {
     };
     useEffect(() => {
         requestInscription()
+        
+        
     },[])
       
     return(
