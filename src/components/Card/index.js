@@ -103,7 +103,7 @@ export const Card = () => {
                   {11}
                 </div>
                 <div className=" h-9 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                <a target="_blank" href={`https://ordinals.com/content/${data.id}.m`} >{data.mime_type}</a>
+                <a target="_blank" href={`https://ordinals.com/content/${data.id}`} >{data.mime_type}</a>
                 </div>
                 <div className=" h-9 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
                   {`${new Date(data.timestamp).toLocaleDateString()}`}
