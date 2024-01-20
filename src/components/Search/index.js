@@ -10,33 +10,23 @@ export const Search = () => {
       try {
         let config = {
           method: "get",
-          
+          maxBodyLength: Infinity,
           url: "https://brc500.adaptable.app/api/v1/inscriptions",
-          
+          headers: {
+            Accept: "application/json",
+          },
         };
 
         axios.request(config).then((response) => {
-          console.log('axios',JSON.stringify(response.data.results));
-          setData2(response.data.results)
+          console.log('axios',JSON.stringify(response.data));
+          setData2(response.data)
         });
       } catch (error) {
         console.log('axios erroe',error);
       }
     };
 
-    const requestBRC = async () => {
-            try {
-              const config = {
-                method: 'GET',
-                mode: 'no-cors'
-              }
-              const response = await fetch("https://brc500.adaptable.app/api/v1/inscriptions", config);
-              const data = await response.json();
-              console.log(data)
-            } catch (error) {
-              alert(error)
-            }
-    }
+    
 
     const requestInscriptionbyAddress = () => {
       try {
@@ -63,8 +53,9 @@ export const Search = () => {
       }
     };
     useEffect(() => {
-        requestInscription(),
-        requestBRC()
+        requestInscription()
+        
+        
     },[])
       
     return(

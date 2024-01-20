@@ -7,11 +7,11 @@ export const Card = () => {
   const toggleToken = () => {
     setIsToken(!isToken);
   }
-  const { data, setData, setMessage, message, data2 } = GlobalContext()
+  const { data, setData, setMessage, message, data2 ,mtid ,setMTID } = GlobalContext()
  
     
   const maxLength = 18;  
-  const getMessage = (id) => {
+  const getMessage = async (id) => {
     try {
       let config = {
         method: "get",
@@ -21,16 +21,35 @@ export const Card = () => {
           Accept: "application/json",
         },
       };
-      axios.request(config).then((res => {
-        setMessage(JSON.stringify(res.data.c))
+      await axios.request(config).then((res => {
+        setMessage(JSON.stringify(res.data.m))
         console.log(message)
       }))
     } catch (error) {
       
     }
   }
+  const getMTID = async (id) => {
+    try {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `https://ordinals.com/content/${id}`,
+        headers: {
+          Accept: "application/json",
+        },
+      };
+      await axios.request(config).then((res => {
+        setMTID(JSON.stringify(res.data.t))
+        console.log(mtid)
+      }))
+    } catch (error) {
+      
+    }
+  }
   useEffect(()=> {
-    getMessage(data?.id);
+    getMessage(data?.inscription_id);
+    getMTID(data.inscription_id)
   },[])
   
   return (
@@ -44,7 +63,7 @@ export const Card = () => {
           {data && data?.map((data,i) => (
              <div key={i}  className="text-black/95 mt-2 bg-white/15 py-2 px-2 w-[24%] rounded-xl ml- h-[330px] mt-5 mb-5 block ">
                  <div className="w-[95%] mb-2 bg-white/15 h-[260px] py-4 px-4 text-center rounded-lg ml-auto mr-auto" >
-                  {` ${ message !== undefined ? message : 'Error Fetching Message'}`} <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMessage(data?.id)}`}</div>
+                  {` ${ message !== undefined ? message : 'Error Fetching Message'}`} <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMessage(data?.inscription_id)}`}</div>
                  </div>
                  <div className="w-[95%] ml-auto h-[40px] flex mr-auto">
                  <div className=" ml-3 mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] py-1 px-2 rounded-xl">
@@ -76,7 +95,7 @@ export const Card = () => {
                 MTID
               </div>
               <div className=" h-8 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[16%] bg-black/70 py-1 px-2 rounded-3xl">
-                Preview
+                Message
               </div>
               <div className=" h-8 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
                 Date
@@ -94,22 +113,22 @@ export const Card = () => {
           {data2 && data2?.map((data,i) => (
              <div key={i}  className="text-black/95 mt-5 mb-5 flex items-center justify-between">
                 <div className=" h-9 lg:w-[8%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  {11}
+                  <div>{mtid ? mtid : 'loading..'}</div>  <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMTID(data?.inscription_id)}`}</div>
                 </div>
                 <div className=" h-9 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                <a target="_blank" href={`https://ordinals.com/content/${data.id}`} >{data.mime_type}</a>
+                <div >{message ? message : 'Loading message...'}</div>
                 </div>
                 <div className=" h-9 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  {`${new Date(data.timestamp).toLocaleDateString()}`}
+                  {`${new Date(data.genesis_block_time - 11).toLocaleDateString()}`}
                 </div>
                 <div className=" h-9 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  <a target="_blank" href={`https://ordinals.com/inscription/${data.id}`} >{data.number}</a>
+                  <a target="_blank" href={`https://ordinals.com/inscription/${data.id}`} >{data.inscription_number}</a>
                 </div>
                 <div className=" h-9 lg:w-[19%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-0.5 px-0.5 rounded-xl">
-                  {`${data.address.slice(0,12)}...`}
+                  {`${data.holder.slice(0,12)}...`}
                 </div>
                 <div className=" h-9 lg:w-[20%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-0.5 px-0.5 rounded-xl">
-                  {`${data.id.slice(0,12)}...`}
+                  {`${data.inscription_id.slice(0,12)}...`}
                 </div>
               </div>
           ))}
