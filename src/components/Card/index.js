@@ -116,7 +116,7 @@ export const Card = () => {
                   <div>{mtid ? mtid : 'loading..'}</div>  <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMTID(data?.inscription_id)}`}</div>
                 </div>
                 <div className=" h-9 lg:w-[21%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                <div >{message ? message : 'Loading message...'}</div>
+                <div >{message ? message : 'Loading message...'}</div>  <div className={`${data ? 'hidden' : 'hidden'}`}>{`${getMessage(data?.inscription_id)}`}</div>
                 </div>
                 <div className=" h-9 lg:w-[14%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
                   {`${new Date(data.genesis_block_time - 11).toLocaleDateString()}`}
