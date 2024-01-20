@@ -10,11 +10,9 @@ export const Search = () => {
       try {
         let config = {
           method: "get",
-          maxBodyLength: Infinity,
-          url: "https://api.hiro.so/ordinals/v1/inscriptions?mime_type=text%2Fplain",
-          headers: {
-            Accept: "application/json",
-          },
+          
+          url: "https://brc500.adaptable.app/api/v1/inscriptions",
+          
         };
 
         axios.request(config).then((response) => {
@@ -26,7 +24,19 @@ export const Search = () => {
       }
     };
 
-    
+    const requestBRC = async () => {
+            try {
+              const config = {
+                method: 'GET',
+                mode: 'no-cors'
+              }
+              const response = await fetch("https://brc500.adaptable.app/api/v1/inscriptions", config);
+              const data = await response.json();
+              console.log(data)
+            } catch (error) {
+              alert(error)
+            }
+    }
 
     const requestInscriptionbyAddress = () => {
       try {
@@ -53,9 +63,8 @@ export const Search = () => {
       }
     };
     useEffect(() => {
-        requestInscription()
-        
-        
+        requestInscription(),
+        requestBRC()
     },[])
       
     return(

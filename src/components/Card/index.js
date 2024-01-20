@@ -8,13 +8,7 @@ export const Card = () => {
     setIsToken(!isToken);
   }
   const { data, setData, setMessage, message, data2 } = GlobalContext()
-  const  truncate = (str, maxLength) => {  
-    if (str.length>maxLength) {  
-    return str.replace(/^(.{0,maxLength}\S*)(\s.*|$)/s, "$1...");  
-    } else {  
-    return str;  
-    }  
-  }  
+ 
     
   const maxLength = 18;  
   const getMessage = (id) => {
