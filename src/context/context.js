@@ -15,7 +15,7 @@ export const BrcContextProvider = ({children}) => {
     const [btcAddress, setBTCAddress] = useState('');
     const [data, setData] = useState([]);
     const [data2, setData2] = useState([]);
-    const [loading, setLoading] = useState(false)
+    const [searchData, setSearchData] = useState([])
     const [message, setMessage] = useState('')
     const [mtid, setMTID] = useState('')
 
@@ -27,9 +27,11 @@ export const BrcContextProvider = ({children}) => {
         data,
         data2,
         message,
+        searchData,
         mtid,
         setIsWalletModal,
         setAddress,
+        setSearchData,
         setBTCAddress,
         setData,
         setData2,

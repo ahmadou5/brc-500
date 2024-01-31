@@ -1,25 +1,53 @@
 'use client'
 import { SearchButton } from "../Buttons"
+import { useState } from "react";
 import axios  from "axios";
 import { GlobalContext } from "@/context/context";
 import { useEffect } from "react";
 import { calculateSizeAdjustValues } from "next/dist/server/font-utils";
 export const Search = () => {
-    const { btcAddress , setBTCAddress, setData,data, setData2 } = GlobalContext()
-    const requestInscription = () => {
+
+  const [mtid, setMtid] = useState("");
+  const [orderBy, setOrderBy] = useState("count");
+  const [orderDir, setOrderDir] = useState("DESC");
+  const [limit, setLimit] = useState(10);
+    const { btcAddress , setBTCAddress, setData,data, setSearchData, setData2 } = GlobalContext()
+    const requestMintInscriptionr = () => {
       try {
         let config = {
           method: "get",
           maxBodyLength: Infinity,
-          url: "https://brc500.adaptable.app/api/v1/inscriptions",
+          url: `https://api.brc500.com/mint?limit=${20}&owner=${btcAddress}`,
           headers: {
             Accept: "application/json",
           },
         };
 
         axios.request(config).then((response) => {
-          console.log('axios',JSON.stringify(response.data));
-          setData2(response.data)
+         // setData(response.data.results);
+          setSearchData(response.data.data)
+          console.log('addresss',response.data.data)
+        });
+      } catch (error) {
+        console.log('axios erroe',error);
+      }
+    };
+
+    const requestDeployInscription = () => {
+      try {
+        let config = {
+          method: "get",
+          maxBodyLength: Infinity,
+          url: "https://api.brc500.com/deploy?offset=&limit=${limit}&owner=${o}&mtid=${t}&orderBy=${orderBy}&orderDir=${orderDir}",
+          headers: {
+            Accept: "application/json",
+          },
+        };
+
+        axios.request(config).then((response) => {
+         // setData(response.data.results);
+          setData2(response.data.data)
+          console.log(response)
         });
       } catch (error) {
         console.log('axios erroe',error);
@@ -33,29 +61,25 @@ export const Search = () => {
         let config = {
           method: "get",
           maxBodyLength: Infinity,
-          url: `https://api.hiro.so/ordinals/v1/inscriptions?address=${btcAddress}`,
+          url: `https://api.brc500.com/deploy?offset=&limit=${limit}&owner=${btcAddress}&orderBy=${orderBy}&orderDir=${orderDir}`,
           headers: {
             Accept: "application/json",
           },
         };
 
-        axios.request(config).then((response) => {
-            if(btcAddress === undefined) {
-              alert("Please enter a valid BTC address")
-              setData([])
-              setBTCAddress('')
-            }
-          console.log('axios',JSON.stringify(response.data));
-          setData(response.data.results)
+        axios.request(config).then((response) => {    
+        console.log('axios',(response.data.data));
+        setSearchData(response.data.data)
+        console.log(data)
+         
         });
       } catch (error) {
         console.log('axios erroe',error);
       }
     };
     useEffect(() => {
-        requestInscription()
-        
-        
+        requestMintInscription()    
+        setData()
     },[])
       
     return(
