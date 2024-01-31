@@ -1,10 +1,24 @@
 export const formatAddress = (value) => {
     console.log("---------Address-----------", value);
-    return value.substring(0,6) + "..." + value.substring(value.length -4,);
+    return value.substring(0,10) + "..." + value.substring(value.length -3,);
   }
   export const formatString = (value) => {
     console.log("---------Address-----------", value);
     return value.substring(0,28) + "..." + value.substring(value.length -14,);
+  }
+
+  export const handleCopy = (value) => {
+    navigator.clipboard.writeText(value).then(
+      () => {
+        // Successfully copied to clipboard
+        console.log('Address copied to clipboard');
+        alert('address copied to clip Board')
+      },
+      (err) => {
+        // Failed to copy to clipboard
+        console.error('Could not copy address: ', err);
+      }
+    );
   }
   
   export const formatDate = (timestamp) => {

@@ -4,6 +4,8 @@ import { ConnectButton } from "../Buttons";
 import Link from "next/link";
 import { WalletModal } from "../Modal/WalletModal";
 import { GlobalContext } from "@/context/context";
+import { IoCopy } from "react-icons/io5";
+import { formatAddress } from "@/config/format";
 
 
 export const Navbar = () => {
@@ -28,7 +30,19 @@ export const Navbar = () => {
     },
     
   ];
-  
+  const handleCopy = (value) => {
+    navigator.clipboard.writeText(value).then(
+      () => {
+        // Successfully copied to clipboard
+        console.log('Address copied to clipboard');
+        alert('address copied to clip Board')
+      },
+      (err) => {
+        // Failed to copy to clipboard
+        console.error('Could not copy address: ', err);
+      }
+    );
+  }
   return (
     <>
       {/**for mobile view **/}
@@ -93,10 +107,10 @@ export const Navbar = () => {
               ))}
             </div>
           </div>
-          <div className="w-[410px] ml-0 mr-0 py-1 px-1">
+          <div className="w-[310px] ml-0 mr-0 py-1 px-1">
             {address 
             ?
-             <div className=" h-9 lg:w-[400px] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-auto bg-white/25 py-1 px-2 rounded-xl">{`${address}`}</div>
+             <div className="w-[100%] h-9 lg:w-[200px] flex flex-row lg:py-1.5 text-center items-center lg:px-2 ml-auto mr-auto bg-black/55 py-1 px-2 rounded-xl"><p className="ml-auto text-white mr-auto">{formatAddress(address.toString())}</p> <IoCopy onClick={() => handleCopy(address) } className="mr-auto text-white cursor-pointer ml-auto"/></div>
             :
              <ConnectButton click={handleClick} text={'Connect'} /> 
             }
