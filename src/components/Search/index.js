@@ -77,10 +77,7 @@ export const Search = () => {
         console.log('axios erroe',error);
       }
     };
-    useEffect(() => {
-        requestMintInscription()    
-        setData()
-    },[])
+    
       
     return(
     <div className="bg-transparent mt-9 mb-9 flex items-center justify-center h-[80px] w-[100%]">
