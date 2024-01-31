@@ -1151,51 +1151,51 @@ export default function LatestMint() {
 
   const wallet = useSelector(state => state.wallet);
 
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [all, setAll] = useState(0);
-  const [owner, setOwner] = useState("");
-  const [mtid, setMtid] = useState("");
+  const [mpage, setMPage] = useState(1);
+  const [mtotal, setMTotal] = useState(0);
+  const [mall, setMAll] = useState(0);
+  const [mowner, setMOwner] = useState("");
+  const [mmtid, setMMtid] = useState("");
   const [orderBy, setOrderBy] = useState("count");
   const [orderDir, setOrderDir] = useState("DESC");
-  const [limit, setLimit] = useState(10);
+  const [mlimit, setmLimit] = useState(10);
   const [deployDatas, setDeployDatas] = useState([]);
 
  
-  const next = () => {
-    if (page === total) return;
+  const Mnext = () => {
+    if (mpage === total) return;
  
-    setPage(page + 1);
-    fetchData(mtid, owner, page + 1);
+    setMPage(page + 1);
+    fetchMintData(mtid, owner, page + 1);
   };
  
-  const prev = () => {
-    if (page === 1) return;
+  const Mprev = () => {
+    if (mpage === 1) return;
  
-    setPage(page - 1);
-    fetchData(mtid, owner, page - 1);
+    setMPage(mpage - 1);
+    fetchMintData(mmtid, mowner, mpage - 1);
   };
 
   const debouncedSearch = useCallback(debounce((mod, value) => {
     if (mod == 0){
-      fetchData(value, owner, 1);
+      fetchMintData(value, owner, 1);
     }
     else {
-      fetchData(mtid, value, 1);
+      fetchMintData(mtid, value, 1);
     }
-    setPage(1);
+    setMPage(1);
   }, 300), []); 
 
   const handleSearch = (mod, value) => {
     if (mod == 0){
-      setMtid(value);
+      setMMtid(value);
     } else {
-      setOwner(value);
+      setMOwner(value);
     }
     debouncedSearch(mod, value);
   };
 
-  const fetchData = async (t, o, p) => {
+  const fetchMintData = async (t, o, p) => {
     let url = "";
     if (p == 1)
       url = `https://api.brc500.com/mint/latest?offset=&limit=${limit}&owner=${o}&mtid=${t}`;
@@ -1207,8 +1207,8 @@ export default function LatestMint() {
     let result = await fetch(url);
     let data = await result.json();
 
-    setAll(data.total);
-    setTotal(Math.ceil(data.total / limit))
+    setMAll(data.total);
+    setMTotal(Math.ceil(data.total / limit))
     setDeployDatas(data.data);
 
   }
@@ -1274,18 +1274,12 @@ export default function LatestMint() {
   }
 
   useEffect(() => {
-    fetchData(mtid, owner, page)
+    fetchMintData(mmtid, mowner, mpage)
   }, [])
 
   useEffect(() => {
-    fetchData(mtid, owner, page)
+    fetchMintData(mmtid, mowner, mpage)
   }, [orderBy, orderDir])
-
-  useEffect(() => {
-    setOwner(wallet.nostrPaymentAddress);
-    setPage(1)
-    fetchData(mtid, wallet.nostrPaymentAddress, 1);
-  }, [wallet.nostrPaymentAddress])
 
   const formatAddress = (value) => {
     return value.substring(0,6) + "..." + value.substring(value.length -4,);
