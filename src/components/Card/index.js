@@ -10,7 +10,7 @@ export const Card = () => {
   const toggleToken = () => {
     setIsToken(!isToken);
   }
-  const { data, setData,setData2, searchData, setSearchData, setMessage, message, data2 ,setMTID } = GlobalContext()
+  const { data, setData,setData2, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
  
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -81,6 +81,18 @@ export const Card = () => {
     setMAll(data.total);
     setMTotal(Math.ceil(data.total / mlimit))
     setData(data.data);
+
+  }
+  
+  const handleClick = async (position, mtid) => {
+    const url = `https://api.brc500.com/address?mtid=${mtid}&position=${position}`;
+
+    // Use fetch to send the request
+
+    let result = await fetch(url);
+    let data = await result.json();
+
+    window.open(`https://ordinals.com/inscription/${data.inscriptionId}`, '_blank');
 
   }
 
@@ -203,7 +215,117 @@ export const Card = () => {
     fetchData(mtid, owner, page)
   }, [orderBy, orderDir])
 
+  // down
+  const [Lpage, setLPage] = useState(1);
+  const [Ltotal, setLTotal] = useState(0);
+  const [Lall, setLAll] = useState(0);
+  const [Lowner, setLOwner] = useState("");
+  const [Lmtid, setLMtid] = useState("");
+  const [orderLBy, setOrderLBy] = useState("count");
+  const [orderLDir, setOrderLDir] = useState("DESC");
+  const [Llimit, setLLimit] = useState(10);
   
+
+ 
+  const Lnext = () => {
+    if (Lpage === Ltotal) return;
+ 
+    setLPage(Lpage + 1);
+    fetchLData(Lmtid, Lowner, Lpage + 1);
+  };
+ 
+  const Lprev = () => {
+    if (Lpage === 1) return;
+ 
+    setLPage(Lpage - 1);
+    fetchLData(Lmtid, Lowner, Lpage - 1);
+  };
+
+  const debouncedLSearch = useCallback(debounce((mod, value) => {
+    if (mod == 0){
+      fetchLData(value, Lowner, 1);
+    }
+    else {
+      fetchLData(Lmtid, value, 1);
+    }
+    setLPage(1);
+  }, 300), []); 
+
+  const handleLSearch = (mod, value) => {
+    if (mod == 0){
+      setLMtid(value);
+    } else {
+      setLOwner(value);
+    }
+    debouncedLSearch(mod, value);
+  };
+
+  const fetchLData = async (t, o, p) => {
+    let url = "";
+    if (p == 1)
+      url = `https://api.brc500.com/mint/latest?offset=&limit=${Llimit}&owner=${o}&mtid=${t}`;
+    else
+      url = `https://api.brc500.com/mint/latest?offset=${p}&limit=${Llimit}&owner=${o}&mtid=${t}`;
+
+    // Use fetch to send the request
+
+    let result = await fetch(url);
+    let data = await result.json();
+
+    setLAll(data.total);
+    setLTotal(Math.ceil(data.total / limit))
+    setData3(data.data);
+
+  }
+
+  const handleLSort = (mod) => {
+    // mod: 0 -> count : 1 -> d.origin_timestamp
+    if (mod == 0)  {
+      if (orderLBy == "count") {
+        if ( orderLDir == "ASC" ) {
+          setOrderLDir("DESC");
+        }
+        else
+        {
+          setOrderLDir("ASC");
+        }
+      }
+      else {
+        setOrderLBy("count");
+        setOrderLDir("DESC");
+      }
+    }
+    else 
+    {
+      if (orderLBy == "d.origin_timestamp") {
+        if ( orderLDir == "ASC" ) {
+          setOrderLDir("DESC");
+        }
+        else
+        {
+          setOrderLDir("ASC");
+        }
+      }
+      else {
+        setOrderLBy("d.origin_timestamp");
+        setOrderLDir("DESC");
+      }
+    }
+    setLPage(1);
+  }
+
+  
+
+  useEffect(() => {
+    fetchLData(mtid, owner, page)
+  }, [])
+
+  useEffect(() => {
+    fetchLData(mtid, owner, page)
+  }, [orderBy, orderDir])
+
+
+
     
   
    
@@ -296,8 +418,21 @@ export const Card = () => {
                 <div className=" h-9 lg:w-[20%] ml-auto mr-auto flex flex-row lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
                   <div className="ml-auto mr-4">{formatAddress(data.owner)}</div>  <IoCopy onClick={() => handleCopy(data.owner) } className="mr-auto cursor-pointer ml-1"/>
                 </div>
-                <div className=" h-9 lg:w-[48%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
-                  {data?.path.length > 70 ? formatString(data.path) : data.path}
+                <div className=" h-9 lg:w-[48%] ml-auto overflow-x-clip mr-auto gap-1 flex lg:py-2 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                 
+                  {
+                            data.path.split(",").map((item, index) => {
+                              return (
+                              <div className="w-4 ml-2 mr-2" key = {index} onClick={()=> {handleClick(item, data.t)}}><p
+                                variant="small"
+                                color=""
+                                className=" hover:text-white text-black/80 hover:font-bold cursor-pointer "
+                              >
+                                {item.length > 30 ? formatString(item) : item}
+                              </p></div>)
+                              //return <div key={index} className=" hover:text-blue-800 hover:font-bold cursor-pointer" onClick={()=> {handleClick(item, itme.t)}}>{item}</div>
+                            })
+                          }
                 </div>
               </div>
           ))}
@@ -386,6 +521,79 @@ export const Card = () => {
           </div>}
         </div>
       )}
+      <div>
+        <div className="w-[80%] ml-auto mr-auto py-6 px-2 bg-transparent h-24 mb-10 mt-36">
+          <div className="w-[80%] bg-black/70 text-center text-2xl h-12 text-white ml-auto mr-auto rounded-3xl">
+            <div className="py-2 px-2">{'Latest BRC-500 Mints'}</div>
+          </div>
+        </div>
+      { data3 && <div className="lg:w-[95%] w-[100%] rounded-3xl ml-auto mr-auto mt-2 mb-2 py-6 px-3 h-auto bg-white/25">
+            <div className="w-[98%] h-12 mb-3 py-2 px-2 flex bg-transparent">
+              <div className="bg-transparent flex w-[50%] h-8">
+              <p className="py-1 px-1 ml-4 lg:py-1 lg:px-2">{'MTID :'}</p>
+              <div className="flex items-center w-[100%] lg:w-[40%] ml-5 mr-auto  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
+              <input onChange={(e) => {
+                handleLSearch?.(0,e.target.value);
+                console.log(e.target.value)
+                
+                } } type="text" placeholder="Search MTID" className="lg:w-[79%] text-sm lg:h-[84%] w-[80%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
+               </div>
+              </div>
+              <div className="bg-transparent flex h-8 w-[50%]">
+              <p className="py-1 px-1 ml-auto mr-3 lg:py-1 lg:px-2">{'Owner :'}</p>
+              <div className="flex items-center w-[100%] lg:w-[40%] ml-3 mr-1  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
+              <input onChange={(e) => {
+                handleLSearch?.(4,e.target.value);
+                console.log(e.target.value)
+                
+                } } type="text" placeholder="Search Owner" className="lg:w-[79%] text-sm lg:h-[84%] w-[80%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
+               </div>
+              </div>
+            </div>
+            <div className="text-white flex items-center justify-between">
+              <div className=" h-8 lg:w-[10%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[16%] bg-black/70 py-1 px-2 rounded-3xl">
+                MTID
+              </div>
+              <div className=" h-8 lg:w-[45%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[16%] bg-black/70 py-1 px-2 rounded-3xl">
+                Comment
+              </div>
+              <div className=" h-8 lg:w-[18%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
+                Owner
+              </div>
+              <div className=" h-8 lg:w-[20%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-black/70 py-1 px-2 rounded-3xl">
+                Date
+              </div>
+              
+            </div>
+          {data3 && data3?.map((data,i) => (
+             <div key={i}  className="text-black/95 mt-5 mb-5 flex items-center justify-between">
+                <div className=" h-9 lg:w-[10%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                  {data.t}
+                </div>
+                <div className=" h-9 lg:w-[45%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-0.5 px-0.5 rounded-xl">
+                  { data.m.length > 89 ? formatString(data.m) : data.m }
+                </div>
+                <div className=" h-9 lg:w-[18%] ml-auto mr-auto lg:py-1.5 flex flex-row text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                 <div className="ml-auto mr-4">{formatAddress(data.owner)}</div>  <IoCopy onClick={() => handleCopy(data.owner) } className="mr-auto  cursor-pointer ml-1"/>
+                </div>
+                <div className=" h-9 lg:w-[20%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
+                  { formatDate(data.origin_timestamp)}
+                </div>
+              </div>
+          ))}
+          {data3 && data3.length !== 0 && <div className="w-[97%] bg-transparent 900 h-9 flex ml-auto mr-auto"> 
+               <div onClick={() => Lprev()} className={`w-28 py-2 px-2 h-9 ml-2 mr-auto cursor-pointer bg-black  rounded-2xl `}>
+                    <p className="  text-white text-center">Prev</p>
+                </div>
+                {`Page ${Lpage} of ${Ltotal}`}
+                <div onClick={() => Lnext()} className={`w-28 py-2 px-2 h-9 mr-2 ml-auto cursor-pointer bg-black rounded-2xl `}>
+                    <p className=" text-white text-center">Next</p>
+                </div>
+          </div>}
+          </div>}
+      </div>
     </div>
+    
   );
+  
 };
