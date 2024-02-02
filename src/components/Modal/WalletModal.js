@@ -1,5 +1,4 @@
 import { GlobalContext } from "@/context/context"
-import { IoFilterCircle, IoExit, } from "react-icons/io5"
 import { TiCancelOutline } from "react-icons/ti";
 import {getAddress} from 'sats-connect'
 

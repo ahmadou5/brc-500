@@ -6,7 +6,9 @@ import axios from "axios";
 import { IoCopy } from "react-icons/io5";
 import { formatDate, formatString, formatAddress , handleCopy } from "@/config/format";
 export const Card = () => {
-  const [isMint, setIsMint] = useState(true);
+  const [isMint, setIsMint] = useState(false);
+  const [isLatest, setIsLatest] = useState(true);
+  const [isDeploy, setIsDeploy] = useState(false);
   const toggleToken = () => {
     setIsToken(!isToken);
   }
@@ -356,16 +358,31 @@ export const Card = () => {
           </div>
         </div>
       }
-      {data && data.length == 0 && <div className="ml-auto mr-auto w-[230px] h-14 mt-[120px] bg-black/50 py-4 text-center px-3.5 rounded-xl">Loading Ordinals</div> }
-      {data && data.length !== 0 &&<div className="flex items-center justify-between text-center mt-8 lg:w-[15%] md:w-[25%] w-[90%] ml-auto mr-auto">
-                <div onClick={() => setIsMint(true)} className={`w-28 py-2 px-2 h-10 cursor-pointer ml-2 mr-2 ${isMint? 'bg-white/85':'bg-black/85'} ${isMint? 'text-black/85':'text-white/85'} rounded-2xl `}>
+      {data && data.length == 0 && <div className="ml-auto mr-auto w-[500px] h-14 mt-[120px] bg-black/50 py-4 text-center px-3.5 rounded-xl">Loading Ordinals</div> }
+      {data && data.length !== 0 &&<div className="flex items-center justify-between text-center mt-8 lg:w-[28%] md:w-[25%] w-[90%] ml-auto mr-auto">
+                <div onClick={() => {
+                  setIsMint(true);
+                  setIsDeploy(false);
+                  setIsLatest(false)
+                }} className={`w-28 py-2 px-2 h-10 cursor-pointer ml-2 mr-2 ${isMint? 'bg-white/85':'bg-black/85'} ${isMint? 'text-black/85':'text-white/85'} rounded-2xl `}>
                     <p className=" hover:text-black/55">Mints</p>
                 </div>
-                <div onClick={() => setIsMint(false)} className={`w-28 ml-2 mr-2 py-2 px-2 h-10 cursor-pointer ${!isMint? 'bg-white/85':'bg-black/85'} ${!isMint? 'text-black/85':'text-white/85'} rounded-2xl `}>
+                <div onClick={() => {
+                  setIsMint(false);
+                  setIsDeploy(true);
+                  setIsLatest(false)
+                }} className={`w-28 ml-2 mr-2 py-2 px-2 h-10 cursor-pointer ${isDeploy? 'bg-white/85':'bg-black/85'} ${isDeploy? 'text-black/85':'text-white/85'} rounded-2xl `}>
                     <p className=" hover:text-black/55">Deploy</p>
                 </div>
+                <div onClick={() => {
+                  setIsMint(false);
+                  setIsDeploy(false);
+                  setIsLatest(true)
+                }} className={`w-[119px] ml-2 mr-2 py-2 px-2 h-10 cursor-pointer ${isLatest? 'bg-white/85':'bg-black/85'} ${isLatest? 'text-black/85':'text-white/85'} rounded-2xl `}>
+                    <p className=" hover:text-black/55">Latest Mint</p>
+                </div>
     </div>}
-      {isMint ? (
+      {isMint && !isDeploy && !isLatest &&
         <div className="w-[100%] mt-[40px] bg-transparent py-4 px-2 h-auto">
        { data && <div className="lg:w-[95%] w-[100%] rounded-3xl ml-auto mr-auto mt-2 mb-2 py-6 px-3 h-auto bg-white/25">
             <div className="w-[98%] h-12 mb-3 py-2 px-2 flex bg-transparent">
@@ -446,8 +463,8 @@ export const Card = () => {
                 </div>
           </div>}
           </div>}
-        </div>
-      ) : (
+        </div>}
+        {isDeploy && !isLatest && !isMint &&
         <div className="w-[100%] mt-[40px] bg-transparent py-4 px-2 h-auto">
        { data2 && <div className="lg:w-[95%] w-[100%] rounded-3xl ml-auto mr-auto mt-2 mb-2 py-6 px-3 h-auto bg-white/25">
             <div className="w-[98%] h-12 mb-3 py-2 px-2 flex bg-transparent">
@@ -519,15 +536,10 @@ export const Card = () => {
                 </div>
           </div>}
           </div>}
-        </div>
-      )}
-      <div>
-        <div className="w-[80%] ml-auto mr-auto py-6 px-2 bg-transparent h-24 mb-10 mt-36">
-          <div className="w-[80%] bg-black/70 text-center text-2xl h-12 text-white ml-auto mr-auto rounded-3xl">
-            <div className="py-2 px-2">{'Latest BRC-500 Mints'}</div>
-          </div>
-        </div>
-      { data3 && <div className="lg:w-[95%] w-[100%] rounded-3xl ml-auto mr-auto mt-2 mb-2 py-6 px-3 h-auto bg-white/25">
+        </div>}
+      {isLatest && !isMint && !isDeploy &&  
+         <div className="w-[100%] mt-[40px] bg-transparent py-4 px-2 h-auto">
+          <div className="lg:w-[95%] w-[100%] mt-2 rounded-3xl ml-auto mr-auto mb-2 py-6 px-3 h-auto bg-white/25">
             <div className="w-[98%] h-12 mb-3 py-2 px-2 flex bg-transparent">
               <div className="bg-transparent flex w-[50%] h-8">
               <p className="py-1 px-1 ml-4 lg:py-1 lg:px-2">{'MTID :'}</p>
@@ -590,8 +602,8 @@ export const Card = () => {
                     <p className=" text-white text-center">Next</p>
                 </div>
           </div>}
+          </div>
           </div>}
-      </div>
     </div>
     
   );
