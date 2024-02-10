@@ -11,7 +11,7 @@ export const Search = () => {
   const [orderBy, setOrderBy] = useState("count");
   const [orderDir, setOrderDir] = useState("DESC");
   const [limit, setLimit] = useState(10);
-    const { btcAddress , setBTCAddress, setData,data, setSearchData, setData2 } = GlobalContext()
+    const { btcAddress , setBTCAddress, setData,data, mintData, deployData, setFullData, setSearchData, setDeployData, setMintData, setData2 } = GlobalContext()
     const requestMintInscriptionr = () => {
       try {
         let config = {
@@ -56,20 +56,20 @@ export const Search = () => {
 
     
 
-    const requestInscriptionbyAddress = () => {
+    const requestDInscriptionbyAddress = (address) => {
       try {
         let config = {
           method: "get",
           maxBodyLength: Infinity,
-          url: `https://api.brc500.com/deploy?offset=&limit=${limit}&owner=${btcAddress}&orderBy=${orderBy}&orderDir=${orderDir}`,
+          url: `https://api.brc500.com/deploy/mine?offset=&limit=${limit}&owner=${address}&orderBy=${orderBy}&orderDir=${orderDir}`,
           headers: {
             Accept: "application/json",
           },
         };
 
         axios.request(config).then((response) => {    
-        console.log('axios',(response.data.data));
-        setSearchData(response.data.data)
+        console.log('axios:deploy',(response.data.data));
+        setDeployData(response.data.data)
         console.log(data)
          
         });
@@ -77,7 +77,41 @@ export const Search = () => {
         console.log('axios erroe',error);
       }
     };
-    
+
+    const requestMInscriptionbyAddress = (address) => {
+      try {
+        let config = {
+          method: "get",
+          maxBodyLength: Infinity,
+          url: `https://api.brc500.com/mint/mine?offset=&limit=${limit}&owner=${address}&orderBy=${orderBy}&orderDir=${orderDir}`,
+          headers: {
+            Accept: "application/json",
+          },
+        };
+
+        axios.request(config).then((response) => {    
+        console.log('axios:mint',(response.data.data));
+        setMintData(response.data.data)
+        console.log(data)
+         
+        });
+      } catch (error) {
+        console.log('axios erroe',error);
+      }
+    };
+
+    const handleRequest = async () => {
+      try {
+      console.log('address:::',btcAddress)
+      requestDInscriptionbyAddress(btcAddress)
+      requestMInscriptionbyAddress(btcAddress)
+      const half =  mintData.concat(deployData)
+      setFullData(half);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+            
       
     return(
     <div className="bg-transparent mt-9 mb-9 flex items-center justify-center h-[80px] w-[100%]">
@@ -87,7 +121,7 @@ export const Search = () => {
                 console.log(e.target.value)
                 console.log(btcAddress,'BTC')
                 } } type="text" placeholder="Enter Your Ordinal Address " className="lg:w-[79%] text-sm lg:h-[84%] w-[80%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
-            <SearchButton click={requestInscriptionbyAddress} text={'search'} className='lg:w-[20%] ml-auto' />
+            <SearchButton click={() => handleRequest()} text={'search'} className='lg:w-[20%] ml-auto' />
         </div>
     </div>
     )

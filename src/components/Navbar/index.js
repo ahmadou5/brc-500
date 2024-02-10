@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ConnectButton } from "../Buttons";
 import Link from "next/link";
 import { WalletModal } from "../Modal/WalletModal";
+import { UserModal } from '@/components/Modal/UserModal'
 import { GlobalContext } from "@/context/context";
 import { IoCopy } from "react-icons/io5";
 import { IoFilterCircle, IoExit, } from "react-icons/io5"
@@ -10,9 +11,9 @@ import { formatAddress } from "@/config/format";
 
 
 export const Navbar = () => {
-  const { isWalletModal , setIsWalletModal, address, setAddress} = GlobalContext()
+  const { isWalletModal , setIsWalletModal, address, show, setShow, setAddress} = GlobalContext()
   const [isModal, setIsModal] = useState(false)
-  const [show, setShow] = useState(false);
+  
   const handleClick = () => {
     setIsWalletModal(true);
     //alert('clicked')
@@ -25,8 +26,13 @@ export const Navbar = () => {
       status: "Live",
     },
     {
+      name: "inscribe",
+      url: "/inscribe",
+      status: "Liver",
+    },
+    {
       name: "Marketplace",
-      url: "/",
+      url: "/marketplace",
       status: "",
     },
     
@@ -112,14 +118,15 @@ export const Navbar = () => {
             {address 
             ?
             <div className="w-full flex" >
-             <div className="w-[100%] h-9 lg:w-[240px] flex flex-row lg:py-1.5 text-center items-center lg:px-2 ml-auto mr-auto bg-black/55 py-1 px-2 rounded-xl"><p className="ml-auto text-white mr-auto">{formatAddress(address.toString())}</p> <IoCopy onClick={() => handleCopy(address) } className="mr-auto text-white cursor-pointer ml-auto"/></div>
-             <div className="w-[100%] h-9 lg:w-[140px] flex flex-row lg:py-1.5 text-center items-center lg:px-2 ml-auto mr-auto bg-black/55 py-1 px-2 rounded-xl"><p className="ml-auto text-white mr-auto">{'Disconnect'}</p> <IoExit onClick={() => setAddress('') } className="mr-auto text-white cursor-pointer ml-auto"/></div>
+             <div onClick={() => setShow(true)} className="w-[100%] h-9 lg:w-[240px] flex flex-row lg:py-1.5 text-center items-center lg:px-2 ml-auto mr-auto bg-black/55 py-1 px-2 rounded-xl"><p className="ml-auto text-white mr-auto">{formatAddress(address.toString())}</p> <IoCopy onClick={() => handleCopy(address) } className="mr-auto text-white cursor-pointer ml-auto"/></div>
+            
             </div>
             :
              <ConnectButton click={handleClick} text={'Connect'} /> 
             }
           </div>
         </div>
+        {show && <UserModal />}
         {isWalletModal && <WalletModal />}
       </div>
     </>

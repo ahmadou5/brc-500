@@ -1488,3 +1488,53 @@ export default function LatestMint() {
 
   )
 }
+
+ const fetchData = async (t, o, p) => {
+    let url = "";
+    if (p == 1)
+      url = `https://api.brc500.com/deploy/mine?offset=&limit=${limit}&owner=${o}&mtid=${t}&orderBy=${orderBy}&orderDir=${orderDir}`;
+    else
+      url = `https://api.brc500.com/deploy/mine?offset=${p}&limit=${limit}&owner=${o}&mtid=${t}&orderBy=${orderBy}&orderDir=${orderDir}`;
+
+    // Use fetch to send the request
+
+    let result = await fetch(url);
+    let data = await result.json();
+
+    setAll(data.total);
+    setTotal(Math.ceil(data.total / limit))
+    setOrdinalDatas(data.data);
+    console.log(data.data);
+  }
+
+  const next = () => {
+    if (page === total) return;
+ 
+    setPage(page + 1);
+    fetchData(mtid, owner, page + 1);
+  };
+
+  const prev = () => {
+    if (page === 1) return;
+ 
+    setPage(page - 1);
+    fetchData(mtid, owner, page - 1);
+  };
+
+  // useEffect(() => {
+  //   fetchData(mtid, wallet.nostrOrdinalsAddress, 1);
+  //   setPage(1);
+  // }, [])
+
+  useEffect(() => {
+    if (wallet.nostrOrdinalsAddress != "")
+    {
+      setOwner(wallet.nostrOrdinalsAddress);
+      fetchData(mtid, wallet.nostrOrdinalsAddress, 1);
+      setPage(1);
+    }
+  }, [wallet.nostrOrdinalsAddress])
+
+  const handleRefresh = () =>  {
+    fetchData(mtid, owner, page);
+  }

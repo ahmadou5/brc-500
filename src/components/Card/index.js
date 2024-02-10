@@ -12,7 +12,7 @@ export const Card = () => {
   const toggleToken = () => {
     setIsToken(!isToken);
   }
-  const { data, setData,setData2, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
+  const { data, setData,setData2,mintData, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
  
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -86,6 +86,7 @@ export const Card = () => {
 
   }
   
+  console.log('ggger',fullData);
   const handleClick = async (position, mtid) => {
     const url = `https://api.brc500.com/address?mtid=${mtid}&position=${position}`;
 
@@ -335,22 +336,30 @@ export const Card = () => {
   return (
     <div className="w-[100%] mt-[120px] bg-transparent py-4 px-1 h-auto">
       {
-        searchData && searchData.length !== 0 && <div className="w-[100%] mt-[40px] bg-transparent py-4 px-1 h-auto">
+        fullData && fullData.length !== 0 && <div className="w-[100%] mt-[40px] bg-transparent py-4 px-1 h-auto">
           <div onClick={() => {
-            setSearchData([])
+           setFullData([])
           }} className="w-[100px] h-9 rounded-full bg-black ml-auto mr-auto py-1 px-1 mb-4 text-center  text-white">Close</div>
         <div className="lg:w-[88%] w-[100%] rounded-3xl flex flex-wrap items-center justify-between ml-auto mr-auto mt-2 mb-2 py-6 px-6 h-auto bg-white/25">
-          {searchData && searchData?.map((data,i) => (
-             <div key={i}  className="text-black/95 mt-2 bg-white/15 py-2 px-2 w-[24%] rounded-xl ml- h-[330px] mt-5 mb-5 block ">
-                 <div className="w-[95%] mb-2 bg-white/15 h-[230px] py-4 px-4 text-center rounded-lg ml-auto mr-auto" >
+          {fullData && fullData?.map((data,i) => (
+             <div key={i}  className="text-black/95 mt-2 bg-white/15 py-2 px-2 w-[24%] rounded-xl ml- h-[330px] mb-5 block ">
+                 <div className="w-[95%] mb-2 bg-white/15 h-[150px]  text-center py-8 px-6 rounded-lg ml-auto mr-auto" >
                   {data.m.length > 70 ? formatString(data.m) : data.m}
                  </div>
                  <div className="w-[100%] ml-auto h-[40px] mr-auto">
-                 <div className="w-[100%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2  py-1 px-2 rounded-xl">
+                 <div className="w-[100%] ml-auto  mr-auto lg:py-1.5 text-center lg:px-2  py-1 px-2 rounded-xl">
                   <a target="_blank" href={`https://ordinals.com/content/${data.inscriptionId}`} >{`#${data.inscriptionNumber}`}</a>
                 </div>
-                <div className="w-[100%] ml-auto mr-auto lg:py-1.5 text-center py-1 px-2 rounded-xl">
+                <div className="w-[100%] ml-auto mr-auto mt-3 lg:py-1.5 text-center py-1 px-2 rounded-xl">
                   {formatDate(data.origin_timestamp)}
+                </div>
+                <div className="flex w-[95%] mt-5 rounded-xl ml-auto mr-auto bg-black/10">
+                  <div className="w-[100%] ml-auto mr-1 lg:py-1.5 text-center py-1 px-2 rounded-xl">
+                   {`MTID: ${data.t}`}
+                  </div>
+                  <div className="w-[100%] ml-1 mr-auto lg:py-1.5 text-center py-1 px-2 rounded-xl">
+                   {`MINTS: #${data.count}`}
+                  </div>
                 </div>
                  </div>
               </div>
