@@ -3,8 +3,9 @@ import { useEffect, useState ,useCallback} from "react";
 import { debounce } from 'lodash';
 import { GlobalContext } from "@/context/context";
 import axios from "axios";
+import { Copied } from "../Modal/Copied";
 import { IoCopy } from "react-icons/io5";
-import { formatDate, formatString, formatAddress , handleCopy } from "@/config/format";
+import { formatDate, formatString, formatAddress  } from "@/config/format";
 export const Card = () => {
   const [isMint, setIsMint] = useState(false);
   const [isLatest, setIsLatest] = useState(true);
@@ -12,7 +13,7 @@ export const Card = () => {
   const toggleToken = () => {
     setIsToken(!isToken);
   }
-  const { data, setData,setData2,mintData, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
+  const { data, setData,setData2,mintData, setCopy, copy, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
  
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -98,7 +99,21 @@ export const Card = () => {
     window.open(`https://ordinals.com/inscription/${data.inscriptionId}`, '_blank');
 
   }
-
+  const handleCopy = (value) => {
+    navigator.clipboard.writeText(value).then(
+      () => {
+        // Successfully copied to clipboard
+        setCopy(true);
+        setTimeout(  () => 
+          setCopy(false),
+          1300)
+      },
+      (err) => {
+        // Failed to copy to clipboard
+        console.error('Could not copy address: ', err);
+      }
+    );
+  }
   const handleSort = (mod) => {
     // mod: 0 -> count : 1 -> d.origin_timestamp
     if (mod == 0)  {
@@ -613,6 +628,7 @@ export const Card = () => {
           </div>}
           </div>
           </div>}
+          {copy && <Copied />}
     </div>
     
   );

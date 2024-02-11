@@ -13,7 +13,7 @@ export default function Inscribe() {
   return (
       <main className="flex min-h-screen flex-col items-center ">
         <Navbar />
-        
+        <div className="mt-[400px] text-3xl">inscribe Page Coming Soon Stay Active</div>
       </main>
   );
 }

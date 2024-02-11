@@ -23,6 +23,8 @@ export const BrcContextProvider = ({children}) => {
     const [show,setShow] = useState(false)
     const [message, setMessage] = useState('')
     const [mtid, setMTID] = useState('')
+    const [balance, setBalance] = useState(0)
+    const [copy, setCopy] = useState(false)
 
 
     const value={
@@ -39,6 +41,10 @@ export const BrcContextProvider = ({children}) => {
         deployData,
         fullData,
         show,
+        balance,
+        copy,
+        setCopy,
+        setBalance,
         setShow,
         setFullData,
         setDeployData,

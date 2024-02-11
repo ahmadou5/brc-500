@@ -5,13 +5,14 @@ import Link from "next/link";
 import { WalletModal } from "../Modal/WalletModal";
 import { UserModal } from '@/components/Modal/UserModal'
 import { GlobalContext } from "@/context/context";
+import { Copied } from "../Modal/Copied";
 import { IoCopy } from "react-icons/io5";
 import { IoFilterCircle, IoExit, } from "react-icons/io5"
 import { formatAddress } from "@/config/format";
 
 
 export const Navbar = () => {
-  const { isWalletModal , setIsWalletModal, address, show, setShow, setAddress} = GlobalContext()
+  const { isWalletModal , setIsWalletModal, address, setCopy, copy, show, setShow, setAddress} = GlobalContext()
   const [isModal, setIsModal] = useState(false)
   
   const handleClick = () => {
@@ -30,19 +31,30 @@ export const Navbar = () => {
       url: "/inscribe",
       status: "Liver",
     },
-    {
-      name: "Marketplace",
-      url: "/marketplace",
-      status: "",
-    },
-    
   ];
   const handleCopy = (value) => {
     navigator.clipboard.writeText(value).then(
       () => {
         // Successfully copied to clipboard
+        setCopy(true);
+        setTimeout(  () => 
+          setCopy(false),
+          1000)
+        alert('address copied to clip Board')
+      },
+      (err) => {
+        // Failed to copy to clipboard
+        console.error('Could not copy address: ', err);
+      }
+    );
+  }
+  const handleCopy2 = (value) => {
+    navigator.clipboard.writeText(value).then(
+      () => {
+        // Successfully copied to clipboard
         console.log('Address copied to clipboard');
         alert('address copied to clip Board')
+        
       },
       (err) => {
         // Failed to copy to clipboard
@@ -128,6 +140,7 @@ export const Navbar = () => {
         </div>
         {show && <UserModal />}
         {isWalletModal && <WalletModal />}
+        {copy && <Copied/>}
       </div>
     </>
   );

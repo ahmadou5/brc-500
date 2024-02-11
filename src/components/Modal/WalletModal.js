@@ -3,7 +3,7 @@ import { TiCancelOutline } from "react-icons/ti";
 import {getAddress} from 'sats-connect'
 
 export const WalletModal = () => {
-    const { setIsWalletModal,setAddress, address} = GlobalContext()
+    const { setIsWalletModal,setAddress, setBalance, address} = GlobalContext()
     const wallets = [
         {
             name: 'Unisat Wallet',
@@ -23,10 +23,15 @@ export const WalletModal = () => {
         try {
             const accounts = await window.unisat.requestAccounts();
             const res = await window.unisat.getAccounts();
+           
+            const balanceRes = await window.unisat.getBalance();
+            
             await setAddress(res);
+            await setBalance(balanceRes)
             console.log('connect success', accounts);
             setIsWalletModal?.(false)
-            console.log(res,address)
+            console.log(res,address,balanceRes)
+            //await   window.unisat.switchNetwork('Testnet')
           } catch (e) {
             console.log('connect failed');
           }
@@ -39,10 +44,12 @@ export const WalletModal = () => {
         try {
             const accounts = await okxwallet.bitcoin.requestAccounts()
             const res = await okxwallet.bitcoin.getAccounts();
+            const balanceRes = await okxwallet.bitcoin.getBalance();
             await setAddress(res);
+            await setBalance(balanceRes)
             console.log('connect success', accounts);
             setIsWalletModal?.(false)
-            console.log(res,address)
+            console.log(res,address,balanceRes)
           } catch (e) {
             console.log('connect okx failed');
           }

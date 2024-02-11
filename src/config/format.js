@@ -1,3 +1,4 @@
+
 export const formatAddress = (value) => {
     
     return value.substring(0,10) + "..." + value.substring(value.length -3,);
@@ -10,8 +11,7 @@ export const formatAddress = (value) => {
   export const handleCopy = (value) => {
     navigator.clipboard.writeText(value).then(
       () => {
-        // Successfully copied to clipboard
-        
+       
         alert('address copied to clip Board')
       },
       (err) => {
