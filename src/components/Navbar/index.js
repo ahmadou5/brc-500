@@ -6,13 +6,14 @@ import { WalletModal } from "../Modal/WalletModal";
 import { UserModal } from '@/components/Modal/UserModal'
 import { GlobalContext } from "@/context/context";
 import { Copied } from "../Modal/Copied";
+import { Connected } from "../Modal/Connected";
 import { IoCopy } from "react-icons/io5";
 import { IoFilterCircle, IoExit, } from "react-icons/io5"
 import { formatAddress } from "@/config/format";
 
 
 export const Navbar = () => {
-  const { isWalletModal , setIsWalletModal, address, setCopy, copy, show, setShow, setAddress} = GlobalContext()
+  const { isWalletModal , setIsWalletModal, address, setCopy, copy, show, setShow, connect, setAddress} = GlobalContext()
   const [isModal, setIsModal] = useState(false)
   
   const handleClick = () => {
@@ -140,7 +141,7 @@ export const Navbar = () => {
         </div>
         {show && <UserModal />}
         {isWalletModal && <WalletModal />}
-        {copy && <Copied/>}
+        
       </div>
     </>
   );

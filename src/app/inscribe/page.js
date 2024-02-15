@@ -31,9 +31,10 @@ import {
   tippingAddress,
   mempoolNetwork,
 } from "@/config/constant";
+import { Connected } from "@/components/Modal/Connected";
 
 export default function Inscribe() {
-  const { data, address, isWalletModal, setIsWalletModal } = GlobalContext();
+  const { data, address, isWalletModal, connect, setIsWalletModal } = GlobalContext();
 
   const wallet = address;
 
@@ -905,6 +906,7 @@ export default function Inscribe() {
       </div>
       <Footer />
       {isWalletModal && <WalletModal />}
+      
     </main>
   );
 }

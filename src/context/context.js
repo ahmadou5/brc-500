@@ -25,6 +25,7 @@ export const BrcContextProvider = ({children}) => {
     const [mtid, setMTID] = useState('')
     const [balance, setBalance] = useState(0)
     const [copy, setCopy] = useState(false)
+    const [connect, setConnect] = useState(false)
 
 
     const value={
@@ -43,6 +44,8 @@ export const BrcContextProvider = ({children}) => {
         show,
         balance,
         copy,
+        connect,
+        setConnect,
         setCopy,
         setBalance,
         setShow,

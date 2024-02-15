@@ -7,7 +7,10 @@ export const formatAddress = (value) => {
    
     return value.substring(0,28) + "..." + value.substring(value.length -14,);
   }
-
+  export const formatMString = (value) => {
+   
+    return value.substring(0,15) + "..." + value.substring(value.length -8,);
+  }
   export const handleCopy = (value) => {
     navigator.clipboard.writeText(value).then(
       () => {
