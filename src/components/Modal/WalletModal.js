@@ -35,7 +35,7 @@ export const WalletModal = () => {
                 setConnect(false)
             },1700)
             console.log(res,address,balanceRes)
-            //await   window.unisat.switchNetwork('Testnet')
+            await   window.unisat.switchNetwork('Mainnet')
           } catch (e) {
             console.log('connect failed');
           }

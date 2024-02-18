@@ -84,7 +84,7 @@ export const UserModal = () => {
     requestMInscriptionbyAddress(address);
 },[])
   return (
-    <div className="inset-0 fixed bg-black/60 bg-opacity-100 w-[100%] z-[99999999] min-h-screen backdrop-blur-sm flex ">
+    <div className="inset-0 fixed bg-black/60 bg-opacity-100 w-[100%] h- z-[99999999] min-h-screen backdrop-blur-sm flex ">
       <div className="w-[94%] lg:w-[25%] h-auto py-2 px-2 drop-shadow-glow ml-auto mr-8 text-black  mt-[100px] bg-white/70 rounded-3xl flex flex-col  pt-5 mb-20 ">
         <div className="ml-auto mb-2 mr-4">
           <IoExit
@@ -132,23 +132,7 @@ export const UserModal = () => {
               </div>
             </div>
           </div>
-          <div className="flex mt-2 py-3 px-3 text-center">
-                <div onClick={() => {
-                  
-                }} className={`w-28 py-2 px-2 h-10 cursor-pointer ml-2 mr-2 bg-black/85 text-black/85 text-white/85 rounded-2xl `}>
-                    <p className=" hover:text-black/55">High</p>
-                </div>
-                <div onClick={() => {
-                  
-                }} className={`w-28 ml-2 mr-2 py-2 px-2 h-10 cursor-pointer  bg-black/85 text-black/85 text-white/85 rounded-2xl `}>
-                    <p className=" hover:text-black/55">Medium</p>
-                </div>
-                <div onClick={() => {
-                  
-                }} className={`w-[119px] ml-2 mr-2 py-2 px-2 h-10 cursor-pointer  bg-black/85 text-black/85 text-white/85 rounded-2xl `}>
-                    <p className=" hover:text-black/55">Low</p>
-                </div>
-          </div>
+          
         </div>
         <div
           onClick={() => {

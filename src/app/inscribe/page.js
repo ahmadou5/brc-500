@@ -11,6 +11,7 @@ import { Footer } from "@/components/Footer";
 import { sendBtcTransaction } from "sats-connect";
 import { ConnectButton, ConnectSmallButton } from "@/components/Buttons";
 import { Address, Script, Signer, Tap, Tx } from "@cmdcode/tapscript";
+import * as cryptoUtils from '@cmdcode/crypto-utils'
 import {
   getFeeRate,
   bytesToHex,
@@ -40,16 +41,17 @@ export default function Inscribe() {
 
   let pushing = false;
   let include_mempool = true;
-  //const { Address, Script, Signer, Tap, Tx } = window.tapscript;
+  // const { Address, Script, Signer, Tap, Tx } = window.tapscript;
   const feeRateTabs = ["Slow", "Normal", "Fast"];
-  const [mode, setMode] = useState("Deploy");
+  const [mode, setMode] = useState("Mint");
+  const [isMint, setIsMint] = useState(true);
   const [feeRateMode, setFeeRateMode] = useState("Normal");
   const [feerate, setFeerate] = useState(0);
   const [feeRates, setFeeRates] = useState({});
   const [feeValues, setFeeValues] = useState({});
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
-  const [receiveAddress, setReceiveAddress] = useState("");
+  const [receiveAddress, setReceiveAddress] = useState("bc1qvc4l844m0pentsa2jckgvywcsnrqpd4n0wf0q2");
   const [mtid, setMtid] = useState("");
   const [message, setMessage] = useState("");
   const [txid, setTxid] = useState("");
@@ -88,8 +90,8 @@ export default function Inscribe() {
   }, [feeRateMode]);
 
   useEffect(() => {
-    setReceiveAddress(wallet.nostrOrdinalsAddress);
-  }, [wallet.nostrOrdinalsAddress]);
+    setReceiveAddress(wallet);
+  }, [wallet]);
 
   const handleOpen = async (value) => {
     if (value == true) {
@@ -151,13 +153,14 @@ export default function Inscribe() {
   };
 
   const inscribeOrdinals = async () => {
-    if (!typeof window) return;
-    if (!window.tapscript) return;
+   
 
-    let cryptoUtils = window.cryptoUtils;
-    const KeyPair = cryptoUtils.KeyPair;
+   
+    // let cryptoUtils = window.cryptoUtils;
+    const KeyPair = cryptoUtils.keys;
+    alert(KeyPair)
+    let privkey = bytesToHex(cryptoUtils.noble.utils);
 
-    let privkey = bytesToHex(cryptoUtils.Noble.utils.randomPrivateKey());
 
     console.log("-----privkey-----", privkey);
 
@@ -558,63 +561,28 @@ export default function Inscribe() {
   };
 
   const handleSubmit = async () => {
-    if (wallet.nostrPaymentAddress == "") {
-      toast("Please connect wallet first.", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        className: "error-toast",
-      });
+   
+    if (wallet == "") {
+      alert(wallet,'not')
+     
       return;
     }
 
     if (receiveAddress == "") {
-      toast("Please insert taproot address.", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        className: "error-toast",
-      });
+      alert('address not provided')
+      
       return;
     }
 
     if (mtid == "") {
-      toast("Please insert mtid.", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        className: "error-toast",
-      });
+      alert('insert mtid')
+      
       return;
     }
 
     if (message == "") {
-      toast("Please insert message.", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        className: "error-toast",
-      });
+      alert('insert msg')
+     
       return;
     }
 
@@ -635,9 +603,8 @@ export default function Inscribe() {
   const handleClick = () => {
     setIsWalletModal(true);
   };
-  const isMint = false;
-
-  const { isDeploy, isLatest } = false;
+  const isNormal = true
+  const {isHigh,  isLow} = false
 
   return (
     <main className="flex min-h-screen flex-col items-center ">
@@ -647,7 +614,11 @@ export default function Inscribe() {
           <div>
             <div className="flex items-center justify-between text-center mt-12 lg:w-[18%] md:w-[17%] w-[90%] ml-auto mr-auto">
               <div
-                onClick={() => {}}
+                onClick={() => {
+                  setIsMint(true);
+                  setMode('Mint');
+                 // alert(mode)
+                }}
                 className={`w-28 py-2 px-2 h-10 cursor-pointer ml-2 mr-2 ${
                   isMint ? "bg-white/85" : "bg-black/85"
                 } ${isMint ? "text-black/85" : "text-white/85"} rounded-2xl `}
@@ -655,10 +626,13 @@ export default function Inscribe() {
                 <p className=" hover:text-black/55">Mint</p>
               </div>
               <div
-                onClick={() => {}}
+                onClick={() => {
+                  setIsMint(false)
+                  setMode('Deploy');
+                }}
                 className={`w-28 ml-2 mr-2 py-2 px-2 h-10 cursor-pointer ${
-                  isDeploy ? "bg-white/85" : "bg-black/85"
-                } ${isDeploy ? "text-black/85" : "text-white/85"} rounded-2xl `}
+                  !isMint ? "bg-white/85" : "bg-black/85"
+                } ${!isMint ? "text-black/85" : "text-white/85"} rounded-2xl `}
               >
                 <p className=" hover:text-black/55">Deploy</p>
               </div>
@@ -676,9 +650,9 @@ export default function Inscribe() {
                         <div className="flex items-center w-[100%] lg:w-[100%] ml-auto text-white mr-auto  rounded-xl bg-white/20 py-1 px-1  lg:py-3 lg:px-4 border border-gray-300 text-black text-sm outline-none h-8 lg:h-[38px]  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
                           <input
                             onChange={(e) => {
-                              setBTCAddress?.(e.target.value);
+                              setMtid?.(e.target.value);
                               console.log(e.target.value);
-                              console.log(btcAddress, "BTC");
+                              
                             }}
                             type="text"
                             placeholder="Enter MTID"
@@ -686,14 +660,13 @@ export default function Inscribe() {
                           />
                         </div>
                         <p className="mt-10 text-start ml-2 text-xl">
-                          MTID Message
+                          MTID Mint Comment
                         </p>
                         <div className="flex mt-0 mb-8 items-center w-[90%] lg:w-[100%] ml-auto text-white mr-auto  rounded-xl bg-white/20 py-1 px-1  lg:py-3 lg:px-4 border border-gray-300 text-black text-sm outline-none h-8 lg:h-[70px]  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
                           <input
                             onChange={(e) => {
-                              setBTCAddress?.(e.target.value);
+                              setMessage?.(e.target.value);
                               console.log(e.target.value);
-                              console.log(btcAddress, "BTC");
                             }}
                             type="text"
                             placeholder="Enter MTID Message"
@@ -706,9 +679,9 @@ export default function Inscribe() {
                         </p>
                         <div className="h-12 flex mt-1 w-[100%] py-2 px-2 text-xl text-bold rounded-xl bg-black/20">
                           <input
-                            value={receiveAddress ? receiveAddress : address}
+                            //value={receiveAddress ? receiveAddress : address}
                             type="text"
-                            className="lg:w-[60%] text-xl lg:h-full w-[70%]  lg:text-xl bg-transparent text-black outline-none mr-auto"
+                            className="lg:w-[80%] text-xl lg:h-full w-[70%]  lg:text-xl bg-transparent text-black outline-none mr-auto"
                           />
                           <ConnectSmallButton
                             className="w-[40%]"
@@ -721,59 +694,65 @@ export default function Inscribe() {
                         <div className="w-[80%] ml-auto mr-auto rounded-2xl bg-transparent h-auto py-3 px-3" id="rate">
                         <div className="flex items-center justify-between text-center mt-0 lg:w-[78%] md:w-[17%] w-[90%] ml-auto mr-auto">
                           <div
-                            onClick={() => {}}
+                            onClick={() => {
+                              setFeeRateMode(feeRateTabs[0])
+                            }}
                             className={`w-28 py-4 px-2 h-20 cursor-pointer ml-2 mr-2 ${
-                              isMint ? "bg-white/85" : "bg-black/85"
+                              feeRateMode === feeRateTabs[0] ? "bg-white/85" : "bg-black/85"
                             } ${
-                              isMint ? "text-black/85" : "text-white/85"
+                              feeRateMode === feeRateTabs[0] ? "text-black/85" : "text-white/85"
                             } rounded-2xl `}
                           >
-                            <p className=" hover:text-black/55">Low</p>
-                            <p className=" hover:text-black/55">3 sats/vB</p>
+                            <p className="">{feeRateTabs[0]}</p>
+                            <p className=" ">{feeRates[feeRateTabs[0]]} sats/vB</p>
                           </div>
                           <div
-                            onClick={() => {}}
+                            onClick={() => {
+                              setFeeRateMode(feeRateTabs[1])
+                            }}
                             className={`w-28 ml-2 mr-2 py-4 px-2 h-20 cursor-pointer ${
-                              isDeploy ? "bg-white/85" : "bg-black/85"
+                              feeRateMode === feeRateTabs[1] ? "bg-white/85" : "bg-black/85"
                             } ${
-                              isDeploy ? "text-black/85" : "text-white/85"
+                              feeRateMode === feeRateTabs[1] ? "text-black/85" : "text-white/85"
                             } rounded-2xl `}
                           >
-                            <p className=" hover:text-black/55">Normal</p>
-                            <p className=" hover:text-black/55">13 sats/vB</p>
+                            <p className="">{feeRateTabs[1]}</p>
+                            <p className="">{feeRates[feeRateTabs[1]]} sats/vB</p>
                           </div>
                           <div
-                            onClick={() => {}}
+                            onClick={() => {
+                              setFeeRateMode(feeRateTabs[2])
+                            }}
                             className={`w-28 ml-2 mr-2 py-4 px-2 h-20 cursor-pointer ${
-                              isDeploy ? "bg-white/85" : "bg-black/85"
+                              feeRateMode === feeRateTabs[2] ? "bg-white/85" : "bg-black/85"
                             } ${
-                              isDeploy ? "text-black/85" : "text-white/85"
+                              feeRateMode === feeRateTabs[2] ? "text-black/85" : "text-white/85"
                             } rounded-2xl `}
                           >
-                            <p className=" hover:text-black/55">High</p>
-                            <p className=" hover:text-black/55">13 sats/vB</p>
+                            <p className="">{feeRateTabs[2]}</p>
+                            <p className="">{feeRates[feeRateTabs[2]]} sats/vB</p>
                           </div>
                         </div>
                         </div>
                         <div className="w-[90%]  ml-auto mr-auto py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Sats in Inscription :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["inscriptionFee"]}/sats</div>
                         </div>
                         <div className="w-[90%] ml-auto mr-auto  py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Network Fee :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["networkFee"]}/sats</div>
                         </div>
                         <div className="w-[90%] ml-auto mr-auto  py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Service Fee :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["serviceFee"]}/sats</div>
                         </div>
                         <div className="w-[90%] ml-auto mr-auto bg-black h-0.5 mt-5 mb-3"></div>
                         <div className="w-[90%] ml-auto mr-auto  py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Total Fee :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["totalFee"]}/sats</div>
                         </div>
                         <div className="mt-16">
-                          <ConnectSmallButton text={'Mint'} />
+                          <ConnectSmallButton click={() => handleSubmit()} text={'Mint'} />
                         </div>
                         
                       </div>
@@ -788,9 +767,9 @@ export default function Inscribe() {
                         <div className="flex items-center w-[100%] lg:w-[100%] ml-auto text-white mr-auto  rounded-xl bg-white/20 py-1 px-1  lg:py-3 lg:px-4 border border-gray-300 text-black text-sm outline-none h-8 lg:h-[38px]  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
                           <input
                             onChange={(e) => {
-                              setBTCAddress?.(e.target.value);
+                              setMtid?.(e.target.value);
                               console.log(e.target.value);
-                              console.log(btcAddress, "BTC");
+                              
                             }}
                             type="text"
                             placeholder="Enter MTID"
@@ -803,9 +782,9 @@ export default function Inscribe() {
                         <div className="flex mt-0 mb-8 items-center w-[90%] lg:w-[100%] ml-auto text-white mr-auto  rounded-xl bg-white/20 py-1 px-1  lg:py-3 lg:px-4 border border-gray-300 text-black text-sm outline-none h-8 lg:h-[70px]  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
                           <input
                             onChange={(e) => {
-                              setBTCAddress?.(e.target.value);
+                              setMessage?.(e.target.value);
                               console.log(e.target.value);
-                              console.log(btcAddress, "BTC");
+                              
                             }}
                             type="text"
                             placeholder="Enter MTID Message"
@@ -833,59 +812,65 @@ export default function Inscribe() {
                         <div className="w-[80%] ml-auto mr-auto rounded-2xl bg-transparent h-auto py-3 px-3" id="rate">
                         <div className="flex items-center justify-between text-center mt-0 lg:w-[78%] md:w-[17%] w-[90%] ml-auto mr-auto">
                           <div
-                            onClick={() => {}}
+                            onClick={() => {
+                              setFeeRateMode(feeRateTabs[0])
+                            }}
                             className={`w-28 py-4 px-2 h-20 cursor-pointer ml-2 mr-2 ${
-                              isMint ? "bg-white/85" : "bg-black/85"
+                              feeRateMode === feeRateTabs[0] ? "bg-white/85" : "bg-black/85"
                             } ${
-                              isMint ? "text-black/85" : "text-white/85"
+                              feeRateMode === feeRateTabs[0] ? "text-black/85" : "text-white/85"
                             } rounded-2xl `}
                           >
-                            <p className=" hover:text-black/55">Low</p>
-                            <p className=" hover:text-black/55">3 sats/vB</p>
+                            <p className="">{feeRateTabs[0]}</p>
+                            <p className=" ">{feeRates[feeRateTabs[0]]} sats/vB</p>
                           </div>
                           <div
-                            onClick={() => {}}
+                            onClick={() => {
+                              setFeeRateMode(feeRateTabs[1])
+                            }}
                             className={`w-28 ml-2 mr-2 py-4 px-2 h-20 cursor-pointer ${
-                              isDeploy ? "bg-white/85" : "bg-black/85"
+                              feeRateMode === feeRateTabs[1] ? "bg-white/85" : "bg-black/85"
                             } ${
-                              isDeploy ? "text-black/85" : "text-white/85"
+                              feeRateMode === feeRateTabs[1] ? "text-black/85" : "text-white/85"
                             } rounded-2xl `}
                           >
-                            <p className=" hover:text-black/55">Normal</p>
-                            <p className=" hover:text-black/55">13 sats/vB</p>
+                            <p className="">{feeRateTabs[1]}</p>
+                            <p className="">{feeRates[feeRateTabs[1]]} sats/vB</p>
                           </div>
                           <div
-                            onClick={() => {}}
+                            onClick={() => {
+                              setFeeRateMode(feeRateTabs[2])
+                            }}
                             className={`w-28 ml-2 mr-2 py-4 px-2 h-20 cursor-pointer ${
-                              isDeploy ? "bg-white/85" : "bg-black/85"
+                              feeRateMode === feeRateTabs[2] ? "bg-white/85" : "bg-black/85"
                             } ${
-                              isDeploy ? "text-black/85" : "text-white/85"
+                              feeRateMode === feeRateTabs[2] ? "text-black/85" : "text-white/85"
                             } rounded-2xl `}
                           >
-                            <p className=" hover:text-black/55">High</p>
-                            <p className=" hover:text-black/55">13 sats/vB</p>
+                            <p className="">{feeRateTabs[2]}</p>
+                            <p className="">{feeRates[feeRateTabs[2]]} sats/vB</p>
                           </div>
                         </div>
                         </div>
                         <div className="w-[90%]  ml-auto mr-auto py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Sats in Inscription :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["inscriptionFee"]}/sats</div>
                         </div>
                         <div className="w-[90%] ml-auto mr-auto  py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Network Fee :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["networkFee"]}/sats</div>
                         </div>
                         <div className="w-[90%] ml-auto mr-auto  py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Service Fee :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["serviceFee"]}/sats</div>
                         </div>
                         <div className="w-[90%] ml-auto mr-auto bg-black h-0.5 mt-5 mb-3"></div>
                         <div className="w-[90%] ml-auto mr-auto  py-2 px-2 flex mt-5 h-10 bg-white/30 rounded-xl">
                           <div className="ml-4 mr-auto">Total Fee :</div>
-                          <div className="ml-auto mr-5">4544</div>
+                          <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["totalFee"]}/sats</div>
                         </div>
                         <div className="mt-16">
-                          <ConnectSmallButton text={'Deploy'} />
+                          <ConnectSmallButton click={() => handleSubmit()} text={'Deploy'} />
                         </div>
                       </div>
                     </div>

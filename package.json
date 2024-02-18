@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cmdcode/crypto-utils": "^2.4.6",
     "@cmdcode/tapscript": "^1.4.4",
     "axios": "^1.6.3",
+    "js-crypto-utils": "^1.0.7",
     "lodash": "^4.17.21",
     "next": "14.0.4",
     "react": "^18",

@@ -7,7 +7,7 @@ import { GlobalContext } from "@/context/context";
 import { Footer } from "@/components/Footer";
 import { WalletModal } from "@/components/Modal/WalletModal";
 import { Loading } from "@/components/Modal/Loading";
-
+import Script from "next/script";
 
 export default function Home() {
   const { data, data2 } = GlobalContext
@@ -17,6 +17,7 @@ export default function Home() {
         <Hero />
         {data2 ? <Card /> : <Loading/>}
         <Footer />
+        <Script src="https://unpkg.com/@cmdcode/tapscript"></Script>
       </main>
   );
 }
