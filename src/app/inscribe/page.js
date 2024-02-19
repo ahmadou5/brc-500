@@ -624,6 +624,8 @@ export default function Inscribe() {
                 onClick={() => {
                   setIsMint(true);
                   setMode('Mint');
+                  setMessage('');
+                  setMtid('');
                  // alert(mode)
                 }}
                 className={`w-28 py-2 px-2 h-10 cursor-pointer ml-2 mr-2 ${
@@ -636,6 +638,8 @@ export default function Inscribe() {
                 onClick={() => {
                   setIsMint(false)
                   setMode('Deploy');
+                  setMessage('');
+                  setMtid('');
                 }}
                 className={`w-28 ml-2 mr-2 py-2 px-2 h-10 cursor-pointer ${
                   !isMint ? "bg-white/85" : "bg-black/85"
