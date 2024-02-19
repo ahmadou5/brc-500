@@ -85,7 +85,7 @@ export const UserModal = () => {
 },[])
   return (
     <div onClick={() => setShow(false)} className="inset-0 fixed bg-black/60 bg-opacity-100 w-[100%] z-[99999999] min-h-screen backdrop-blur-sm flex ">
-      <div className="w-[94%] z-[999999999999] lg:w-[25%] h-auto h-96 py-2 px-2 drop-shadow-glow ml-auto mr-8 text-black  mt-[100px] bg-white/70 rounded-3xl flex flex-col  pt-5 mb-20 ">
+      <div className="w-[94%] z-[999999999999] lg:w-[25%] h-96 py-2 px-2 drop-shadow-glow ml-auto mr-8 text-black  mt-[100px] bg-white/70 rounded-3xl flex flex-col  pt-5 mb-20 ">
         <div className="ml-auto mb-2 mr-4">
           <IoExit
             className="text-black cursor-pointer h-6 w-6"
