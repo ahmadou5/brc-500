@@ -15,9 +15,8 @@ export default function Home() {
       <main className="flex min-h-screen flex-col items-center ">
         <Navbar />
         <Hero />
-        {data2 ? <Card /> : <Loading/>}
+         <Card />
         <Footer />
-        <Script src="https://unpkg.com/@cmdcode/tapscript"></Script>
       </main>
   );
 }

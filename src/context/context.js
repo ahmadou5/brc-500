@@ -25,6 +25,7 @@ export const BrcContextProvider = ({children}) => {
     const [mtid, setMTID] = useState('')
     const [balance, setBalance] = useState(0)
     const [copy, setCopy] = useState(false)
+    const [wallet, setWallet] = useState('')
     const [connect, setConnect] = useState(false)
 
 
@@ -45,6 +46,8 @@ export const BrcContextProvider = ({children}) => {
         balance,
         copy,
         connect,
+        wallet,
+        setWallet,
         setConnect,
         setCopy,
         setBalance,

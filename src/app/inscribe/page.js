@@ -9,9 +9,11 @@ import { GlobalContext } from "@/context/context";
 import { WalletModal } from "@/components/Modal/WalletModal";
 import { Footer } from "@/components/Footer";
 import { sendBtcTransaction } from "sats-connect";
+import { InscribeModal } from "@/components/Modal/InscribeModal";
 import { ConnectButton, ConnectSmallButton } from "@/components/Buttons";
 import { Address, Script, Signer, Tap, Tx } from "@cmdcode/tapscript";
-import * as cryptoUtils from '@cmdcode/crypto-utils'
+import * as CryptoUtils from '@cmdcode/crypto-utils'
+import * as secp from '@noble/secp256k1'
 import {
   getFeeRate,
   bytesToHex,
@@ -35,7 +37,7 @@ import {
 import { Connected } from "@/components/Modal/Connected";
 
 export default function Inscribe() {
-  const { data, address, isWalletModal, connect, setIsWalletModal } = GlobalContext();
+  const { data, wallet:walletType , setWallet, address, isWalletModal, connect, setIsWalletModal } = GlobalContext();
 
   const wallet = address;
 
@@ -153,25 +155,29 @@ export default function Inscribe() {
   };
 
   const inscribeOrdinals = async () => {
-   
+    if (!typeof window) return
+    if (!window.tapscript) return
 
-   
-    // let cryptoUtils = window.cryptoUtils;
-    const KeyPair = cryptoUtils.keys;
-    alert(KeyPair)
-    let privkey = bytesToHex(cryptoUtils.noble.utils);
+    console.log(CryptoUtils)
+
+    let cryptoUtils = window.crypto_utils;
+
+    // const KeyPair = cryptoUtils.keys.get_keypair();
+
+    let privkey = bytesToHex(secp.utils.randomPrivateKey());
 
 
     console.log("-----privkey-----", privkey);
 
     // Create a keypair to use for testing
-    let seckey = new KeyPair(privkey);
-    let pubkey = seckey.pub.rawX;
+    let seckey = cryptoUtils.keys.get_seckey(privkey);
+    let pubkey = cryptoUtils.keys.get_pubkey(seckey,true);;
+    console.log(pubkey,'pouu')
 
     const ec = new TextEncoder();
 
     const init_script = [pubkey, "OP_CHECKSIG"];
-
+    
     const init_script_backup = ["0x" + buf2hex(pubkey.buffer), "OP_CHECKSIG"];
 
     let init_leaf = await Tap.tree.getLeaf(Script.encode(init_script));
@@ -327,15 +333,16 @@ export default function Inscribe() {
     });
 
     console.log("-----inscriptions-------", inscriptions);
+    console.log(address.domain)
 
     try {
-      if (wallet.domain == "unisat") {
+      if (walletType === 'unisat') {
         await window.unisat.sendBitcoin(fundingAddress, total_fees);
       }
-      if (wallet.domain == "okxwallet") {
+      if (walletType === 'okx') {
         await window.okxwallet.bitcoin.sendBitcoin(fundingAddress, total_fees);
       }
-      if (wallet.domain == "xverseWallet") {
+      if (walletType === 'xverse') {
         const sendBtcOptions = {
           payload: {
             network: {
@@ -891,6 +898,7 @@ export default function Inscribe() {
       </div>
       <Footer />
       {isWalletModal && <WalletModal />}
+      {show1 && <InscribeModal/>}
       
     </main>
   );

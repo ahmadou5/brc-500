@@ -425,7 +425,7 @@ export const Card = () => {
           </div>
         </div>
       }
-      {data && data.length == 0 && <div className="ml-auto mr-auto w-[500px] h-14 mt-[120px] bg-black/50 py-4 text-center px-3.5 rounded-xl">Loading Ordinals</div> }
+      {data && data.length == 0 && <div className="ml-auto mr-auto w-[70%] lg:w-[500px] h-14 mt-[120px] bg-black/50 py-4 text-center px-3.5 rounded-xl">Loading Ordinals</div> }
       {data && data.length !== 0 &&<div className="flex items-center justify-between text-center mt-8 lg:w-[28%] md:w-[25%] w-[90%] ml-auto mr-auto">
                 <div onClick={() => {
                   setIsMint(true);
@@ -453,19 +453,19 @@ export const Card = () => {
         <div className="w-[100%] mt-[40px] bg-transparent py-4 px-2 h-auto">
        { data && <div className="lg:w-[95%] w-[100%] rounded-3xl ml-auto mr-auto mt-2 mb-2 py-6 px-3 h-auto bg-white/25">
             <div className="w-[98%] h-12 mb-3 py-2 px-2 flex bg-transparent">
-              <div className="bg-transparent flex w-[50%] h-8">
-              <p className="py-1 px-1 ml-4 lg:py-1 lg:px-2">{'MTID :'}</p>
-              <div className="flex items-center w-[100%] lg:w-[40%] ml-5 mr-auto  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
+              <div className="bg-transparent flex w-[40%] h-8">
+              <p className=" ml-0 lg:ml-4 lg:py-1 lg:px-2">{'MTID :'}</p>
+              <div className="flex items-center w-[80%] lg:w-[40%] ml- lg:ml-5 mr-  lg:mr-auto  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
               <input onChange={(e) => {
                 handleMSearch?.(0,e.target.value);
                 console.log(e.target.value)
                 
-                } } type="text" placeholder="Search MTID" className="lg:w-[79%] text-sm lg:h-[84%] w-[80%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
+                } } type="text" placeholder="Search MTID" className="lg:w-[79%] text-sm lg:h-[84%] w-[70%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
                </div>
               </div>
               <div className="bg-transparent flex h-8 w-[50%]">
               <p className="py-1 px-1 ml-auto mr-3 lg:py-1 lg:px-2">{'Owner :'}</p>
-              <div className="flex items-center w-[100%] lg:w-[40%] ml-3 mr-1  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
+              <div className="flex items-center w-[100%] lg:w-[40%] lg:ml-3 ml-0 lg:mr-1 mr-0  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
               <input onChange={(e) => {
                 handleMSearch?.(4,e.target.value);
                 console.log(e.target.value)

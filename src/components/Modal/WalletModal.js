@@ -3,7 +3,7 @@ import { TiCancelOutline } from "react-icons/ti";
 import {getAddress} from 'sats-connect'
 
 export const WalletModal = () => {
-    const { setIsWalletModal,setAddress, setConnect, setBalance, address} = GlobalContext()
+    const { setIsWalletModal,setAddress, setConnect, setWallet,  setBalance, address} = GlobalContext()
     const wallets = [
         {
             name: 'Unisat Wallet',
@@ -18,7 +18,7 @@ export const WalletModal = () => {
     ]
     const UnisatConnect = async () => {
         if(typeof window.unisat !== undefined) {
-            console.log('akwae')
+            
         }
         try {
             const accounts = await window.unisat.requestAccounts();
@@ -35,7 +35,7 @@ export const WalletModal = () => {
                 setConnect(false)
             },1700)
             console.log(res,address,balanceRes)
-            await   window.unisat.switchNetwork('Mainnet')
+            setWallet('unisat')
           } catch (e) {
             console.log('connect failed');
           }
@@ -47,6 +47,7 @@ export const WalletModal = () => {
         }
         try {
             const accounts = await okxwallet.bitcoin.requestAccounts()
+            
             const res = await okxwallet.bitcoin.getAccounts();
             const balanceRes = await okxwallet.bitcoin.getBalance();
             await setAddress(res);
@@ -57,6 +58,7 @@ export const WalletModal = () => {
             setTimeout(() => {
                 setConnect(false)
             },1700)
+            setWallet('okx')
             console.log(res,address,balanceRes)
           } catch (e) {
             console.log('connect okx failed');
@@ -80,6 +82,7 @@ export const WalletModal = () => {
               
           await getAddress(getAddressOptions);
           setIsWalletModal?.(false)
+          setWallet('xverse')
           setConnect(true)
           setTimeout(() => {
             setConnect(false)

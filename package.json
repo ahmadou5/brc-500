@@ -11,6 +11,7 @@
   "dependencies": {
     "@cmdcode/crypto-utils": "^2.4.6",
     "@cmdcode/tapscript": "^1.4.4",
+    "@noble/secp256k1": "^2.0.0",
     "axios": "^1.6.3",
     "js-crypto-utils": "^1.0.7",
     "lodash": "^4.17.21",
@@ -19,6 +20,7 @@
     "react-dom": "^18",
     "react-icon": "^1.0.0",
     "react-icons": "^5.0.1",
+    "react-loader-spinner": "^6.1.6",
     "sats-connect": "^1.4.1"
   },
   "devDependencies": {
