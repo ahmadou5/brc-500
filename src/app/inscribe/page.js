@@ -53,7 +53,7 @@ export default function Inscribe() {
   const [feeValues, setFeeValues] = useState({});
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
-  const [receiveAddress, setReceiveAddress] = useState("bc1qvc4l844m0pentsa2jckgvywcsnrqpd4n0wf0q2");
+  const [receiveAddress, setReceiveAddress] = useState("");
   const [mtid, setMtid] = useState("");
   const [message, setMessage] = useState("");
   const [txid, setTxid] = useState("");

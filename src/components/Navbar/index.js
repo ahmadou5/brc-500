@@ -30,7 +30,7 @@ export const Navbar = () => {
     {
       name: "inscribe",
       url: "/inscribe",
-      status: "Liver",
+      status: "Live",
     },
   ];
   const handleCopy = (value) => {
