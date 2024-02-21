@@ -32,6 +32,11 @@ export const Navbar = () => {
       url: "/inscribe",
       status: "Live",
     },
+    {
+      name: "activities",
+      url: "/activities",
+      status: "Live",
+    },
   ];
   const handleCopy = (value) => {
     navigator.clipboard.writeText(value).then(

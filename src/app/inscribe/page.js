@@ -204,7 +204,7 @@ export default function Inscribe() {
       ],
     });
 
-    const test_sig = await Signer.taproot.sign(seckey.raw, test_redeemtx, 0, {
+    const test_sig = await Signer.taproot.sign(seckey, test_redeemtx, 0, {
       extension: init_leaf,
     });
     test_redeemtx.vin[0].witness = [test_sig.hex, init_script, init_cblock];
@@ -333,7 +333,7 @@ export default function Inscribe() {
     });
 
     console.log("-----inscriptions-------", inscriptions);
-    console.log(address.domain)
+    // console.log(address.domain)
 
     try {
       if (walletType === 'unisat') {
@@ -649,7 +649,6 @@ export default function Inscribe() {
               </div>
             </div>
             <div className="bg-red w-[100%] h-auto text-center mt-20 ">
-              {address ? (
                 <div className="w-full h-auto">
                   {isMint ? (
                     <div className="w-[50%] bg-white/30 ml-auto mr-auto rounded-xl py-3 px-3 mb-12 h-[1020px]">
@@ -690,7 +689,7 @@ export default function Inscribe() {
                         </p>
                         <div className="h-12 flex mt-1 w-[100%] py-2 px-2 text-xl text-bold rounded-xl bg-black/20">
                           <input
-                            //value={receiveAddress ? receiveAddress : address}
+                            value={receiveAddress ? receiveAddress : address}
                             type="text"
                             className="lg:w-[80%] text-xl lg:h-full w-[70%]  lg:text-xl bg-transparent text-black outline-none mr-auto"
                           />
@@ -763,7 +762,12 @@ export default function Inscribe() {
                           <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["totalFee"]}/sats</div>
                         </div>
                         <div className="mt-16">
-                          <ConnectSmallButton click={() => handleSubmit()} text={'Mint'} />
+                          {
+                            address ? 
+                            <ConnectSmallButton click={() => handleSubmit()} text={'Submit'} /> 
+                            :
+                            <ConnectSmallButton click={() => handleClick()} text={'Connect Wallet'} />
+                          }
                         </div>
                         
                       </div>
@@ -881,21 +885,17 @@ export default function Inscribe() {
                           <div className="ml-auto mr-5">{isNaN(feeValues["totalFee"]) ? '-' : feeValues["totalFee"]}/sats</div>
                         </div>
                         <div className="mt-16">
-                          <ConnectSmallButton click={() => handleSubmit()} text={'Deploy'} />
+                        {
+                            address ? 
+                            <ConnectSmallButton click={() => handleSubmit()} text={'Submit'} /> 
+                            :
+                            <ConnectSmallButton click={() => handleClick()} text={'Connect Wallet'} />
+                          }
                         </div>
                       </div>
                     </div>
                   )}
                 </div>
-              ) : (
-                <div className="w-[60%] ml-auto mr-auto py-3 px-3 mt-[170px] bg-white/15 rounded-xl h-[230px]">
-                  <div className="mt-10 mb-0 text-xl align-text-bottom">{`You need to Connect Your BTC Wallet to Inscribe ${"mint"} `}</div>
-                  <div className="mt-0 mb-12 text-xl align-text-bottom">
-                    {"BRC-500"}
-                  </div>
-                  <ConnectButton click={handleClick} text={"Connect Wallet"} />
-                </div>
-              )}
             </div>
           </div>
         </div>
