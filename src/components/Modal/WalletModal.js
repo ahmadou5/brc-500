@@ -43,7 +43,7 @@ export const WalletModal = () => {
     const OKXConnect = async () => {
         if (typeof window.okxwallet !== 'undefined') {
             console.log('OKX is installed!');
-            alert('akoi okx')
+          
         }
         try {
             const accounts = await okxwallet.bitcoin.requestAccounts()
@@ -95,7 +95,7 @@ export const WalletModal = () => {
                 <p className="text-xl ml-0 mr-auto">Connect Your Wallet </p>
                 <div className="text-xl mr-0 ml-auto">
                 <div onClick={() => setIsWalletModal?.(false)} className='w-8 h-8 py-1.5 px-1 hover:bg-black/60 cursor-pointer rounded-lg bg-black/30'>
-                  <TiCancelOutline className="ml-auto mr-auto"/>
+                  <TiCancelOutline className="ml-auto mr-auto"/> 
                 </div>
                 </div>
             </div>

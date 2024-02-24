@@ -12,7 +12,7 @@ export const Card = () => {
   const [isLatest, setIsLatest] = useState(true);
   const [isDeploy, setIsDeploy] = useState(false);
   
-  const { data, setData,setData2,mintData, setDeployData,  btcAddress, setBTCAddress, address,  setCopy, copy, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
+  const { data, setData,setData2,mintData, setDeployData, setMintData,   btcAddress, setBTCAddress, address,  setCopy, copy, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
  
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -87,7 +87,7 @@ export const Card = () => {
 
   }
   
-  console.log('ggger',fullData);
+  // console.log('ggger',fullData);
   const handleClick = async (position, mtid) => {
     const url = `https://api.brc500.com/address?mtid=${mtid}&position=${position}`;
 
@@ -391,14 +391,16 @@ export const Card = () => {
    if (m2page === m2total) return;
 
    setM2Page(m2page + 1);
-   fetchM2Data(m2mtid, m2owner, m2page + 1);
+   
+   fetchM2Data(m2mtid, btcAddress, m2page + 1);
  };
 
  const m2prev = () => {
    if (m2page === 1) return;
 
    setM2Page(m2page - 1);
-   fetchM2Data(m2mtid, m2owner, m2page - 1);
+   
+   fetchM2Data(m2mtid, btcAddress, m2page - 1);
  };
 
 
@@ -407,6 +409,27 @@ export const Card = () => {
    fetchM2Data(m2mtid, m2owner, m2page);
  };
 
+ const requestMInscriptionbyAddress = (address) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `https://api.brc500.com/mint/mine?offset=&limit=${limit}&owner=${address}&orderBy=${orderBy}&orderDir=${orderDir}`,
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    axios.request(config).then((response) => {    
+    console.log('axios:mint',(response.data.data));
+    setMintData(response.data.data)
+    console.log(data)
+     
+    });
+  } catch (error) {
+    console.log('axios erroe',error);
+  }
+};
  const requestDInscriptionbyAddress = (address) => {
   try {
     let config = {
@@ -435,7 +458,7 @@ export const Card = () => {
   requestDInscriptionbyAddress(btcAddress)
   fetchM2Data(m2mtid, btcAddress, 1);
   setM2Page(1)
-  // requestMInscriptionbyAddress(btcAddress)
+  requestMInscriptionbyAddress(btcAddress)
   const half =  mintData.concat(deployData)
   setFullData(half);
   } catch (error) {
@@ -452,7 +475,8 @@ export const Card = () => {
                 console.log(e.target.value)
                 console.log(btcAddress,'BTC')
                 } } type="text" placeholder="Enter Your Ordinal Address " className="lg:w-[79%] text-sm lg:h-[84%] w-[80%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
-            <SearchButton click={() => handleRequest()} text={'search'} className='lg:w-[20%] ml-auto' />
+           
+            <button onClick={() => handleRequest()} className=" flex text-center text-sm flex-row ml-auto mr-auto py-1 px-1 cursor-pointer  text-white hover:bg-black/40  bg-black/85 rounded-full w-[110px]  lg:w-[220px] h-9 lg:h-[45px]"><div className="text-sm  mt-auto mb-auto font-bold ml-auto mr-auto">{'Search'}</div></button>
         </div>
     </div>
       {

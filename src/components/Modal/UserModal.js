@@ -85,12 +85,12 @@ export const UserModal = () => {
 },[])
   return (
     <div className="inset-0 fixed bg-black/60 bg-opacity-100 w-[100%] z-[99999999] min-h-screen backdrop-blur-sm flex ">
-      <div className="w-[94%]  lg:w-[25%] h-96 py-2 px-2 drop-shadow-glow ml-auto mr-8 text-black  mt-[100px] bg-white/70 rounded-3xl flex flex-col  pt-5 mb-20 ">
+      <div className="w-[94%]  lg:w-[25%] h-[400px] py-2 px-2 drop-shadow-glow ml-auto mr-8 text-black  mt-[100px] bg-white/70 rounded-3xl flex flex-col  pt-5 mb-20 ">
         <div className="ml-auto mb-2 mr-4">
-          <IoExit
-            className="text-black cursor-pointer h-6 w-6"
-            onClick={() => setShow(false)}
-          />
+          <div  onClick={() => setShow(false)} className="w-20 h-8 text-white text-center py-1 px-2 bg-black rounded-3xl">
+             Close
+          </div>
+         
         </div>
         <div className="h-[80%] ml-auto rounded-xl mt-1 mb-4 mr-auto px-2 py-2  w-[98%] ">
           <div className="flex py-0.5 px-2 mb-3 bg-black/60 rounded-full">
@@ -102,7 +102,10 @@ export const UserModal = () => {
             <div className="py-3 flex px-3 ml-auto mr-auto text-balance text-xl">
               {" "}
               {` ${formatAddress(address.toString())}`}{" "}
-              <IoCopy className="mr-2 ml-2" onClick={() => handleCopy(address)} />
+              <IoCopy className="mr-2 ml-2" onClick={() => {
+                handleCopy(address);
+                setShow(false)
+                }} />
             </div>
           </div>
           <div className="flex  py-3 px-2 mb-2  rounded-full">
