@@ -17,8 +17,9 @@ export const BrcContextProvider = ({children}) => {
     const [data3, setData3] = useState([]);
     const [data2, setData2] = useState([]);
     const [searchData, setSearchData] = useState([])
-    const [mintData, setDeployData] = useState([])
-    const [deployData, setMintData] = useState([])
+    const [mintData, setMintData] = useState([])
+    const [deployData, setDeployData] = useState([])
+    
     const [fullData,setFullData] = useState([])
     const [show,setShow] = useState(false)
     const [message, setMessage] = useState('')

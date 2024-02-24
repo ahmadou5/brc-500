@@ -9,7 +9,7 @@ export const Hero = () => {
                     <img className="w-10 h-9 ml-9 lg:ml-16" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png" alt="BTC"/>
                 </div>
             </div>
-            <Search />
+            
         </div>
     </div>
 

@@ -2,6 +2,7 @@
 import { useEffect, useState ,useCallback} from "react";
 import { debounce } from 'lodash';
 import { GlobalContext } from "@/context/context";
+import { SearchButton } from "../Buttons";
 import axios from "axios";
 import { Copied } from "../Modal/Copied";
 import { IoCopy } from "react-icons/io5";
@@ -10,10 +11,8 @@ export const Card = () => {
   const [isMint, setIsMint] = useState(false);
   const [isLatest, setIsLatest] = useState(true);
   const [isDeploy, setIsDeploy] = useState(false);
-  const toggleToken = () => {
-    setIsToken(!isToken);
-  }
-  const { data, setData,setData2,mintData, setCopy, copy, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
+  
+  const { data, setData,setData2,mintData, setDeployData,  btcAddress, setBTCAddress, address,  setCopy, copy, deployData, fullData,setFullData, searchData, setSearchData, setMessage, data3, setData3, message, data2 ,setMTID } = GlobalContext()
  
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -347,10 +346,115 @@ export const Card = () => {
 
  // const isMint1 = false
   
-   
+ const [m2limit, setM2Limit] = useState(8);
+ const [m2page, setM2Page] = useState(1);
+ const [orderm2By, setM2OrderBy] = useState("m.inscriptionNumber");
+ const [orderm2Dir, setM2OrderDir] = useState("DESC");
+ const [m2all, setM2All] = useState(0);
+ const [m2total, setM2Total] = useState(0);
+ const [m2mtid, setM2Mtid] = useState("");
+ const [m2owner, setM2Owner] = useState("");
+ const [ordinalm2Datas, setMOrdinal2Datas] = useState([]);
+
+ const debouncedM2Search = useCallback(
+   debounce((value) => {
+     fetchM2Data(value, m2owner, 1);
+     setM2Page(1);
+   }, 300),
+   []
+ );
+
+ const handleM2Search = (value) => {
+   setM2Mtid(value);
+   debouncedM2Search(value);
+ };
+
+ const fetchM2Data = async (t, o, p) => {
+   let url = "";
+   if (p == 1)
+     url = `https://api.brc500.com/mint/mine?offset=&limit=${m2limit}&owner=${o}&mtid=${t}&orderBy=${orderm2By}&orderDir=${orderm2Dir}`;
+   else
+     url = `https://api.brc500.com/mint/mine?offset=${p}&limit=${m2limit}&owner=${o}&mtid=${t}&orderBy=${orderm2By}&orderDir=${orderm2Dir}`;
+
+   // Use fetch to send the request
+
+   let result = await fetch(url);
+   let data = await result.json();
+
+   setM2All(data.total);
+   setM2Total(Math.ceil(data.total / m2limit));
+   setMOrdinal2Datas(data.data);
+   console.log("mint", data.data);
+ };
+
+ const m2next = () => {
+   if (m2page === m2total) return;
+
+   setM2Page(m2page + 1);
+   fetchM2Data(m2mtid, m2owner, m2page + 1);
+ };
+
+ const m2prev = () => {
+   if (m2page === 1) return;
+
+   setM2Page(m2page - 1);
+   fetchM2Data(m2mtid, m2owner, m2page - 1);
+ };
+
+
+
+ const handleM2Refresh = () => {
+   fetchM2Data(m2mtid, m2owner, m2page);
+ };
+
+ const requestDInscriptionbyAddress = (address) => {
+  try {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `https://api.brc500.com/deploy/mine?offset=&limit=${limit}&owner=${address}&orderBy=${orderBy}&orderDir=${orderDir}`,
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    axios.request(config).then((response) => {    
+    console.log('axios:deploy',(response.data.data));
+    setDeployData(response.data.data)
+    console.log(data)
+     
+    });
+  } catch (error) {
+    console.log('axios erroe',error);
+  }
+};
+
+ const handleRequest = async () => {
+  try {
+  console.log('address:::',btcAddress)
+  requestDInscriptionbyAddress(btcAddress)
+  fetchM2Data(m2mtid, btcAddress, 1);
+  setM2Page(1)
+  // requestMInscriptionbyAddress(btcAddress)
+  const half =  mintData.concat(deployData)
+  setFullData(half);
+  } catch (error) {
+    console.log(error)
+  }
+}
 
   return (
     <div className="w-[100%] mt-[120px] bg-transparent py-4 px-1 h-auto">
+      <div className="bg-transparent mt-9 mb-[70px] flex items-center justify-center h-[80px] w-[100%]">
+        <div className="flex items-center w-[100%] lg:w-[70%] ml-auto mr-auto  rounded-full bg-white/30 py-1 px-1  lg:py-3 lg:px-4 border border-gray-300 text-gray-900 text-sm outline-none h-12 lg:h-[58px]  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
+            <input onChange={(e) => {
+                setBTCAddress?.(e.target.value);
+                console.log(e.target.value)
+                console.log(btcAddress,'BTC')
+                } } type="text" placeholder="Enter Your Ordinal Address " className="lg:w-[79%] text-sm lg:h-[84%] w-[80%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
+            <SearchButton click={() => handleRequest()} text={'search'} className='lg:w-[20%] ml-auto' />
+        </div>
+    </div>
       {
         fullData && fullData.length !== 0 && <div className="w-[100%] mt-[40px] bg-transparent py-4 px-1 h-auto">
           <div onClick={() => {
@@ -371,11 +475,26 @@ export const Card = () => {
                 </div>
           </div>
           </div>
+          {isMint1 && <div className="w-[85%] ml-auto mr-auto h-12 mb-3 py-2 px-2 mt-6 rounded-full  flex bg-transparent">
+              <div className="bg-transparent flex w-[40%] h-8">
+              <p className=" ml-0 lg:ml-4 lg:py-1 lg:px-2">{'MTID :'}</p>
+              <div className="flex items-center w-[80%] lg:w-[40%] ml- lg:ml-5 mr-  lg:mr-auto  rounded-full bg-black/30 py-1 px-1  lg:py-1 lg:px-2 border border-gray-300 text-gray-900 text-sm outline-none h-8 lg:h-8  focus:ring-green-500 focus:border-green-500 p-2.5 dark:bg-white/30 dark:border-black/40 dark:placeholder-gray-400 dark:text-black/50 dark:focus:ring-green-500 dark:focus:border-green-500/70">
+              <input onChange={(e) => {
+                handleM2Search?.(0,e.target.value);
+                console.log(e.target.value)
+                
+                } } type="text" placeholder="Search MTID" className="lg:w-[79%] text-sm lg:h-[84%] w-[70%] h-16  lg:text-xl bg-transparent outline-none mr-auto"  />
+               </div>
+              </div>
+              <div className="bg-transparent flex h-8 w-[50%]">
+              
+              </div>
+            </div>}
           { isMint1 
           ?
            <div className="flex flex-wrap w-[100%] rounded-3xl  items-center justify-between ml-auto mr-auto mt-4 mb-2 py-6 px-6 h-auto">
-            {deployData.length == 0 && <div className="text-center h-12 w-[30%] rounded-2xl bg-black/45 ml-auto mr-auto py-3 px-3">User Does not Have mint Data</div>}
-            {deployData && deployData?.map((data,i) => (
+            {ordinalm2Datas.length == 0 && <div className="text-center h-12 w-[30%] rounded-2xl bg-black/45 ml-auto mr-auto py-3 px-3">User Does not Have mint Data</div>}
+            {ordinalm2Datas && ordinalm2Datas?.map((data,i) => (
              <div key={i}  className="text-black/95 mt-2 bg-white/15 py-2 px-2 w-[24%] rounded-xl ml- h-[360px] mb-5 block ">
                  <div className="w-[95%] mb-2 bg-white/15 h-[210px]  text-center py-8 px-6 rounded-lg ml-auto mr-auto" >
                   <div className="mb-4 mt-2">{'MTID - MINT'}</div>
@@ -396,6 +515,15 @@ export const Card = () => {
                </div>
               </div>
           ))}
+          {isMint1 && data.length !== 0 && <div className="w-[97%] bg-transparent 900 mt-4 h-9 flex ml-auto mr-auto"> 
+               <div onClick={() => m2prev()} className={`w-28 py-2 px-2 h-9 ml-2 mr-auto cursor-pointer bg-black  rounded-2xl `}>
+                    <p className="  text-white text-center">Prev</p>
+                </div>
+                {`Page ${m2page} of ${m2total}`}
+                <div onClick={() => m2next()} className={`w-28 py-2 px-2 h-9 mr-2 ml-auto cursor-pointer bg-black rounded-2xl `}>
+                    <p className=" text-white text-center">Next</p>
+                </div>
+          </div>}
            </div>
             :
             <div className="flex flex-wrap w-[100%] rounded-3xl  items-center justify-between ml-auto mr-auto mt-4 mb-2 py-6 px-6 h-auto">
@@ -420,6 +548,7 @@ export const Card = () => {
                  </div>
               </div>
           ))}
+       
            </div>}
           
           </div>
@@ -573,7 +702,7 @@ export const Card = () => {
                 Message
               </div>
             </div>
-          {data2 && data2?.map((data,i) => (
+          {data2 && data2.map((data,i) => (
              <div key={i}  className="text-black/95 mt-5 mb-5 flex items-center justify-between">
                 <div className=" h-9 lg:w-[10%] ml-auto mr-auto lg:py-1.5 text-center lg:px-2 w-[24%] bg-white/25 py-1 px-2 rounded-xl">
                   {data.t}
